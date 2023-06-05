@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <div className="flex h-screen bg-gray-200">
+        <div className="flex bg-gray-200">
           <Sidebar />
           <div className="flex flex-col w-full">
             <Navbar />
