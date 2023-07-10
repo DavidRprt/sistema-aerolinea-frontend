@@ -14,5 +14,17 @@ const getModelos = async () => {
   return response.data
 }
 
+const postModelo = async (modelo) => {
+  try {
+     const url = `http://localhost:3001/api/modelos`
+    const response = await axios.post(url, modelo)
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error("Error al realizar la solicitud POST:", error)
+    throw error
+  }
+}
+
 // eslint-disable-next-line
-export default { getAll, getModelos }
+export default { getAll, getModelos, postModelo }

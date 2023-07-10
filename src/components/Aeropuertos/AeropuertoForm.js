@@ -1,55 +1,72 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
+import aeropuertosService from "../../services/aeropuertosService"
 
 const AgregarAeropuerto = () => {
   const [aeropuerto, setAeropuerto] = useState({
-    codigo: "",
+    idAeropuerto: "",
     nombre: "",
     ciudad: "",
     pais: "",
     latitud: "",
     longitud: "",
-    zonaHoraria: "",
+    timezone: "",
   })
 
   const handleChange = (e) => {
     setAeropuerto({ ...aeropuerto, [e.target.name]: e.target.value })
-  };
+  }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    console.log(aeropuerto)
+    try {
+      console.log(aeropuerto)
+      await aeropuertosService.postAeropuerto(aeropuerto)
+      console.log("Aeropuerto creado exitosamente")
 
-    setAeropuerto({
-      codigo: "",
-      nombre: "",
-      ciudad: "",
-      pais: "",
-      latitud: "",
-      longitud: "",
-      zonaHoraria: "",
-    })
+      setAeropuerto({
+        idAeropuerto: "",
+        nombre: "",
+        ciudad: "",
+        pais: "",
+        latitud: "",
+        longitud: "",
+        timezone: "",
+      })
+    } catch (error) {
+      console.error("Error al crear el aeropuerto:", error)
+      window.alert("Ocurrió un error al crear el aeropuerto")
+    }
   }
 
   return (
     <div className="container mx-auto p-4">
-      <form onSubmit={handleSubmit} className="  bg-white p-4 border border-gray-300 rounded">
+      <form
+        onSubmit={handleSubmit}
+        className="  bg-white p-4 border border-gray-300 rounded"
+      >
         <div className="grid grid-cols-2 gap-4">
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="codigo">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="idAeropuerto"
+            >
               Código
             </label>
             <input
               type="text"
-              name="codigo"
-              value={aeropuerto.codigo}
+              name="idAeropuerto"
+              value={aeropuerto.idAeropuerto}
               onChange={handleChange}
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombre">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="nombre"
+            >
               Nombre
             </label>
             <input
@@ -62,7 +79,10 @@ const AgregarAeropuerto = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ciudad">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="ciudad"
+            >
               Ciudad
             </label>
             <input
@@ -75,7 +95,10 @@ const AgregarAeropuerto = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="pais">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="pais"
+            >
               País
             </label>
             <input
@@ -88,7 +111,10 @@ const AgregarAeropuerto = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="latitud">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="latitud"
+            >
               Latitud
             </label>
             <input
@@ -101,7 +127,10 @@ const AgregarAeropuerto = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="longitud">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="longitud"
+            >
               Longitud
             </label>
             <input
@@ -114,13 +143,16 @@ const AgregarAeropuerto = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="zonaHoraria">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="timezone"
+            >
               Zona Horaria
             </label>
             <input
               type="text"
-              name="zonaHoraria"
-              value={aeropuerto.zonaHoraria}
+              name="timezone"
+              value={aeropuerto.timezone}
               onChange={handleChange}
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required

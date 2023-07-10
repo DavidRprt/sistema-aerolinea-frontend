@@ -1,8 +1,9 @@
 import React, { useState } from "react"
+import avionesService from "../../services/avionesService"
 
 const ModeloForm = () => {
   const [modelo, setModelo] = useState({
-    nombreModelo: "",
+    modelo: "",
     autonomia: "",
   })
 
@@ -10,16 +11,24 @@ const ModeloForm = () => {
     setModelo({ ...modelo, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Lógica para enviar el objeto `modelo` mediante una solicitud POST
-    console.log(modelo)
-    // Resetear el formulario
-    setModelo({
-      nombreModelo: "",
-      autonomia: "",
-    })
+
+    try {
+      await avionesService.postModelo(modelo)
+      console.log("Modelo agregado exitosamente")
+
+      setModelo({
+        modelo: "",
+        autonomia: "",
+      })
+    } catch (error) {
+      console.error("Error al aregar el modelo:", error)
+      window.alert("Ocurrió un error al agregar el modelo")
+    }
   }
+
+  
 
   return (
     <div className="container mx-auto px-4">
@@ -30,14 +39,14 @@ const ModeloForm = () => {
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="nombreModelo"
+            htmlFor="modelo"
           >
             Nombre del Modelo
           </label>
           <input
             type="text"
-            name="nombreModelo"
-            value={modelo.nombreModelo}
+            name="modelo"
+            value={modelo.modelo}
             onChange={handleChange}
             className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             required
