@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom"
 import { GiExplodingPlanet } from "react-icons/gi"
 import { MdOutlineAirplaneTicket } from "react-icons/md"
-import { AiOutlineUser } from "react-icons/ai"
+import { AiOutlineUser, AiOutlineUserAdd } from "react-icons/ai"
 import { MdConnectingAirports } from "react-icons/md"
 import { CiAirportSign1 } from "react-icons/ci"
+import { BsFillAirplaneFill, BsFillAirplaneEnginesFill } from "react-icons/bs"
 
 const Sidebar = () => {
   return (
@@ -31,6 +32,13 @@ const Sidebar = () => {
                   Gestionar cliente
                 </Link>
               </div>
+
+              <div className="flex items-center px-3 my-3 text-gray-200 transition-colors duration-300 hover:text-gray-400">
+                <AiOutlineUserAdd className="text-xl" />
+                <Link className="mx-2 text-lg font-medium" to="/registrar">
+                  Registrar cliente
+                </Link>
+              </div>
             </div>
 
             <div className="my-6 ">
@@ -40,6 +48,20 @@ const Sidebar = () => {
                 <MdConnectingAirports className="text-xl" />
                 <Link className="mx-2 text-lg font-medium" to="/rutas">
                   Rutas
+                </Link>
+              </div>
+
+              <div className="flex items-center px-3 my-3 text-gray-200 transition-colors duration-300 hover:text-gray-400">
+                <BsFillAirplaneFill className="text-xl" />
+                <Link className="mx-2 text-lg font-medium" to="/aviones">
+                  Aviones
+                </Link>
+              </div>
+
+              <div className="flex items-center px-3 my-3 text-gray-200 transition-colors duration-300 hover:text-gray-400">
+                <BsFillAirplaneEnginesFill className="text-xl" />
+                <Link className="mx-2 text-lg font-medium" to="/modelos">
+                  Modelos
                 </Link>
               </div>
 

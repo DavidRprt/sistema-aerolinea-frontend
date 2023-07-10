@@ -2,16 +2,15 @@ import React from "react"
 import MilesStatus from "./MilesStatus"
 
 const ClientInfo = ({ user }) => {
-
-   const handleCancel = (reservationCode) => {
-     const confirmCancel = window.confirm(
-       "¿Estás seguro de que quieres cancelar la reserva?"
-     )
-     if (confirmCancel) {
-       // Aquí puedes agregar el código para cancelar la reserva en tu sistema
-       console.log(`La reserva ${reservationCode} ha sido cancelada.`)
-     }
-   }
+  const handleCancel = (reservationCode) => {
+    const confirmCancel = window.confirm(
+      "¿Estás seguro de que quieres cancelar la reserva?"
+    )
+    if (confirmCancel) {
+      // Aquí puedes agregar el código para cancelar la reserva en tu sistema
+      console.log(`La reserva ${reservationCode} ha sido cancelada.`)
+    }
+  }
 
   // Cliente ficticio
   const client = {
