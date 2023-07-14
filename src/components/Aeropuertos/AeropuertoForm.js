@@ -3,7 +3,7 @@ import aeropuertosService from "../../services/aeropuertosService"
 
 const AgregarAeropuerto = () => {
   const [aeropuerto, setAeropuerto] = useState({
-    idAeropuerto: "",
+    idaeropuerto: "",
     nombre: "",
     ciudad: "",
     pais: "",
@@ -25,7 +25,7 @@ const AgregarAeropuerto = () => {
       console.log("Aeropuerto creado exitosamente")
 
       setAeropuerto({
-        idAeropuerto: "",
+        idaeropuerto: "",
         nombre: "",
         ciudad: "",
         pais: "",
@@ -49,14 +49,14 @@ const AgregarAeropuerto = () => {
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="idAeropuerto"
+              htmlFor="idaeropuerto"
             >
               Código
             </label>
             <input
               type="text"
-              name="idAeropuerto"
-              value={aeropuerto.idAeropuerto}
+              name="idaeropuerto"
+              value={aeropuerto.idaeropuerto}
               onChange={handleChange}
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required

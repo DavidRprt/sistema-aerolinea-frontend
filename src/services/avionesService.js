@@ -26,5 +26,18 @@ const postModelo = async (modelo) => {
   }
 }
 
+const deleteModelo = async (idModelo) => {
+  try {
+    const response = await axios.delete(`http://localhost:3001/api/modelos`, {
+      data: { idModelo: idModelo },
+    })
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error("Error al realizar la solicitud DELETE:", error)
+    throw error
+  }
+}
+
 // eslint-disable-next-line
-export default { getAll, getModelos, postModelo }
+export default { getAll, getModelos, postModelo, deleteModelo }

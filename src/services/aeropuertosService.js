@@ -19,5 +19,19 @@ const postAeropuerto = async (aeropuerto) => {
   }
 }
 
+const deleteAeropuerto = async (idAeropuerto) => {
+  try {
+    const response = await axios.delete(url, {
+      data: { idAeropuerto: idAeropuerto },
+    })
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error("Error al realizar la solicitud DELETE:", error)
+    throw error
+  }
+}
+
+
 // eslint-disable-next-line
-export default { getAll, postAeropuerto }
+export default { getAll, postAeropuerto, deleteAeropuerto }

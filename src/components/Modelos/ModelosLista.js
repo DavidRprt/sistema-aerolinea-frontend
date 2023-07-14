@@ -17,8 +17,7 @@ const ModelosLista = () => {
   const confirmarEliminacion = (idModelo) => {
     const confirmacion = window.confirm("¿Estás seguro de eliminar esto?")
     if (confirmacion) {
-      // Lógica para eliminar el modelo con el id correspondiente
-      console.log("Modelo eliminado:", idModelo)
+      avionesService.deleteModelo(idModelo)
     }
   }
 
@@ -39,9 +38,9 @@ const ModelosLista = () => {
         </thead>
         <tbody>
           {modelos.map((modelo) => (
-            <tr key={modelo.idModelo}>
+            <tr key={modelo.idmodelo}>
               <td className="py-2 px-4 border-b text-center">
-                {modelo.idModelo}
+                {modelo.idmodelo}
               </td>
               <td className="py-2 px-4 border-b text-center">
                 {modelo.modelo}
@@ -52,7 +51,7 @@ const ModelosLista = () => {
               <td className="py-2 px-4 border-b text-center">
                 <button
                   className="text-red-500 hover:text-red-700"
-                  onClick={() => confirmarEliminacion(modelo.idModelo)}
+                  onClick={() => confirmarEliminacion(modelo.idmodelo)}
                 >
                   <RiDeleteBin5Line />
                 </button>

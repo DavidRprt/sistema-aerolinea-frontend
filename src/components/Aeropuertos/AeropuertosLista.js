@@ -17,8 +17,7 @@ const AeropuertosLista = () => {
   const confirmarEliminacion = (idAeropuerto) => {
     const confirmacion = window.confirm("¿Estás seguro de eliminar esto?")
     if (confirmacion) {
-      // Lógica para eliminar el aeropuerto con el id correspondiente
-      console.log("Aeropuerto eliminado:", idAeropuerto)
+      aeropuertosService.deleteAeropuerto(idAeropuerto)
     }
   }
 
@@ -43,9 +42,9 @@ const AeropuertosLista = () => {
         </thead>
         <tbody>
           {aeropuertos.map((objeto) => (
-            <tr key={objeto.idAeropuerto}>
+            <tr key={objeto.idaeropuerto}>
               <td className="py-2 px-4 border-b text-center">
-                {objeto.idAeropuerto}
+                {objeto.idaeropuerto}
               </td>
               <td className="py-2 px-4 border-b text-center">
                 {objeto.nombre}
@@ -66,7 +65,7 @@ const AeropuertosLista = () => {
               <td className="py-2 px-4 border-b text-center">
                 <button
                   className="text-red-500 hover:text-red-700"
-                  onClick={() => confirmarEliminacion(objeto.idAeropuerto)}
+                  onClick={() => confirmarEliminacion(objeto.idaeropuerto)}
                 >
                   <RiDeleteBin5Line />
                 </button>

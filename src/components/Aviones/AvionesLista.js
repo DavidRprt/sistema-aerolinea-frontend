@@ -42,25 +42,25 @@ const AvionesLista = () => {
         </thead>
         <tbody>
           {aviones.map((avion) => (
-            <tr key={avion.idAvion}>
+            <tr key={avion.idavion}>
               <td className="py-2 px-4 border-b text-center">{avion.nombre}</td>
               <td className="py-2 px-4 border-b text-center">{avion.año}</td>
               <td className="py-2 px-4 border-b text-center">
-                {avion.capacidadTurista}
+                {avion.capacidadturista}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {avion.capacidadPremium}
+                {avion.capacidadpremium}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {avion.capacidadBusiness}
+                {avion.capacidadbusiness}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {avion.ModeloAvion.modelo}
+                {avion.modeloavion.modelo}
               </td>
               <td className="py-2 px-4 border-b text-center">
                 <button
                   className="text-red-500 hover:text-red-700"
-                  onClick={() => confirmarEliminacion(avion.idAvion)}
+                  onClick={() => confirmarEliminacion(avion.idavion)}
                 >
                   <RiDeleteBin5Line />
                 </button>

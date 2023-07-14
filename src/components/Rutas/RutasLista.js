@@ -44,19 +44,19 @@ const RutasLista = () => {
         </thead>
         <tbody>
           {rutas.map((ruta) => (
-            <tr key={ruta.idRuta}>
-              <td className="py-2 px-4 border-b text-center">{ruta.idRuta}</td>
+            <tr key={ruta.idruta}>
+              <td className="py-2 px-4 border-b text-center">{ruta.idruta}</td>
               <td className="py-2 px-4 border-b text-center">
-                {ruta.idOrigen}
+                {ruta.idorigen}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {ruta.idDestino}
+                {ruta.iddestino}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                ${ruta.precioBase}
+                ${ruta.preciobase}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {ruta.horarioSalida}
+                {ruta.horariosalida}
               </td>
               <td className="py-2 px-4 border-b text-center">
                 {ruta.lunes && "Lunes "}
@@ -71,12 +71,12 @@ const RutasLista = () => {
                 {ruta.duracion} horas
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {ruta.Avion.nombre}
+                {ruta.avion.nombre}
               </td>
               <td className="py-2 px-4 border-b text-center">
                 <button
                   className="text-red-500 hover:text-red-700"
-                  onClick={() => confirmarEliminacion(ruta.idRuta)}
+                  onClick={() => confirmarEliminacion(ruta.idruta)}
                 >
                   <RiDeleteBin5Line />
                 </button>
