@@ -1,12 +1,23 @@
 import React, { useState } from "react"
-import Checkbox from "./Checkbox"
+import { useDispatch } from "react-redux"
+import DiasSemanaSelect from "./DiaSemanaSelect"
+import AvionSelect from "./AvionSelect"
+import { useSelector } from "react-redux"
+import rutasService from "../../services/rutasService"
+import { agregarRuta} from "../../reducers/rutaReducer"
+import CodigoAeropuertoSelect from "./CodigoAeropuertoSelect"
 
-const RutasForm = () => {
+const AgregarRuta = () => {
+
+  const dispatch = useDispatch()
+  const aviones = useSelector((state) => state.aviones)
   const [ruta, setRuta] = useState({
-    idOrigen: "",
-    idDestino: "",
-    precioBase: "",
-    horarioSalida: "",
+    idorigen: "",
+    iddestino: "",
+    idavion: "",
+    preciobase: "",
+    horariosalida: "",
+    duracion: "",
     lunes: false,
     martes: false,
     miercoles: false,
@@ -20,30 +31,47 @@ const RutasForm = () => {
     const { name, value, type, checked } = e.target
     const newValue = type === "checkbox" ? checked : value
 
-    setRuta((prevRuta) => ({
-      ...prevRuta,
-      [name]: newValue,
-    }))
+    setRuta({ ...ruta, [name]: newValue })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Lógica para enviar el objeto `ruta` mediante una solicitud POST
-    console.log(ruta)
-    // Resetear el formulario
-    setRuta({
-      idOrigen: "",
-      idDestino: "",
-      precioBase: "",
-      horarioSalida: "",
-      lunes: false,
-      martes: false,
-      miercoles: false,
-      jueves: false,
-      viernes: false,
-      sabado: false,
-      domingo: false,
-    })
+
+    try {
+      const newRuta = await rutasService.postRuta(ruta)
+
+      const avion = aviones.find(
+        (avion) => avion.idavion == ruta.idavion
+      )
+
+
+       const rutaConAvion = {
+         ...newRuta,
+         avion: { nombre: avion.nombre },
+       } 
+
+      dispatch(agregarRuta(rutaConAvion))
+      console.log("Ruta creada exitosamente")
+
+      setRuta({
+        idorigen: "",
+        iddestino: "",
+        idavion: "",
+        preciobase: "",
+        horariosalida: "",
+        duracion: "",
+        lunes: false,
+        martes: false,
+        miercoles: false,
+        jueves: false,
+        viernes: false,
+        sabado: false,
+        domingo: false,
+      })
+    } catch (error) {
+      console.error("Error al crear la ruta:", error)
+      window.alert("Ocurrió un error al crear la ruta")
+    }
   }
 
   return (
@@ -53,56 +81,90 @@ const RutasForm = () => {
         className="bg-white p-4 border border-gray-300 rounded"
       >
         <div className="grid grid-cols-2 gap-4">
-          {/* ...otros campos del formulario */}
-          <div className="col-span-2">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Días de la semana
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="idorigen"
+            >
+              Origen
             </label>
-            <div className="grid grid-cols-7 gap-4">
-              <Checkbox
-                name="lunes"
-                label="Lunes"
-                checked={ruta.lunes}
-                onChange={handleChange}
-              />
-              <Checkbox
-                name="martes"
-                label="Martes"
-                checked={ruta.martes}
-                onChange={handleChange}
-              />
-              <Checkbox
-                name="miercoles"
-                label="Miércoles"
-                checked={ruta.miercoles}
-                onChange={handleChange}
-              />
-              <Checkbox
-                name="jueves"
-                label="Jueves"
-                checked={ruta.jueves}
-                onChange={handleChange}
-              />
-              <Checkbox
-                name="viernes"
-                label="Viernes"
-                checked={ruta.viernes}
-                onChange={handleChange}
-              />
-              <Checkbox
-                name="sabado"
-                label="Sábado"
-                checked={ruta.sabado}
-                onChange={handleChange}
-              />
-              <Checkbox
-                name="domingo"
-                label="Domingo"
-                checked={ruta.domingo}
-                onChange={handleChange}
-              />
-            </div>
+            <CodigoAeropuertoSelect
+              name="idorigen"
+              value={ruta.idorigen}
+              onChange={handleChange}
+            />
           </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="iddestino"
+            >
+              Destino
+            </label>
+            <CodigoAeropuertoSelect
+              name="iddestino"
+              value={ruta.iddestino}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="idavion"
+            >
+              Avión
+            </label>
+            <AvionSelect value={ruta.idavion} onChange={handleChange} />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="preciobase"
+            >
+              Precio Base
+            </label>
+            <input
+              type="number"
+              name="preciobase"
+              value={ruta.preciobase}
+              onChange={handleChange}
+              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="horariosalida"
+            >
+              Horario de Salida
+            </label>
+            <input
+              type="time"
+              name="horariosalida"
+              value={ruta.horariosalida}
+              onChange={handleChange}
+              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="duracion"
+            >
+              Duración (en horas)
+            </label>
+            <input
+              type="number"
+              name="duracion"
+              value={ruta.duracion}
+              onChange={handleChange}
+              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
+          <DiasSemanaSelect diasSeleccionados={ruta} onChange={handleChange} />
         </div>
         <div className="flex items-center justify-end">
           <button
@@ -117,4 +179,4 @@ const RutasForm = () => {
   )
 }
 
-export default RutasForm
+export default AgregarRuta

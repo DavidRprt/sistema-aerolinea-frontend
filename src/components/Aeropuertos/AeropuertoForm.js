@@ -1,7 +1,9 @@
 import React, { useState } from "react"
 import aeropuertosService from "../../services/aeropuertosService"
+import TimezoneSelect from "./TimezoneSelect"
 import { agregarAeropuerto } from "../../reducers/aeropuertoReducer"
 import { useDispatch } from "react-redux"
+import PaisSelect from "./PaisSelect"
 
 const AgregarAeropuerto = () => {
 
@@ -105,8 +107,7 @@ const AgregarAeropuerto = () => {
             >
               País
             </label>
-            <input
-              type="text"
+            <PaisSelect
               name="pais"
               value={aeropuerto.pais}
               onChange={handleChange}
@@ -114,6 +115,7 @@ const AgregarAeropuerto = () => {
               required
             />
           </div>
+
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -127,6 +129,8 @@ const AgregarAeropuerto = () => {
               value={aeropuerto.latitud}
               onChange={handleChange}
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              pattern="^-?([1-8]?[0-9]\.{1}\d+|90\.{1}0+)$"
+              title="Ingrese una latitud válida en el rango de -90 a 90 (ejemplo: 37.7749)"
               required
             />
           </div>
@@ -143,6 +147,8 @@ const AgregarAeropuerto = () => {
               value={aeropuerto.longitud}
               onChange={handleChange}
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              pattern="^-?((([1-9]?[0-9]|1[0-7][0-9])(\.\d+)?)|180(\.0+)?)$"
+              title="Ingrese una longitud válida en el rango de -180 a 180 (ejemplo: -122.4194)"
               required
             />
           </div>
@@ -153,8 +159,7 @@ const AgregarAeropuerto = () => {
             >
               Zona Horaria
             </label>
-            <input
-              type="text"
+            <TimezoneSelect
               name="timezone"
               value={aeropuerto.timezone}
               onChange={handleChange}

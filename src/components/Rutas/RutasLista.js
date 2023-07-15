@@ -1,30 +1,22 @@
-import React, { useState, useEffect } from "react"
 import rutasService from "../../services/rutasService"
 import { RiDeleteBin5Line } from "react-icons/ri"
+import { useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
+import { eliminarRuta } from "../../reducers/rutaReducer"
 
 const RutasLista = () => {
-  const [rutas, setRutas] = useState([])
 
-  async function obtenerRutas() {
-    try {
-      const rutas = await rutasService.getAll()
-      setRutas(rutas)
-    } catch (error) {
-      console.error("Error al obtener las rutas:", error)
-    }
-  }
-
-  const confirmarEliminacion = (idRuta) => {
+  const dispatch = useDispatch()
+  const rutas = useSelector((state) => state.rutas)
+ 
+  const confirmarEliminacion = async (idRuta) => {
     const confirmacion = window.confirm("¿Estás seguro de eliminar esto?")
     if (confirmacion) {
-      // Lógica para eliminar la ruta con el id correspondiente
-      console.log("Ruta eliminada:", idRuta)
+      await rutasService.deleteRuta(idRuta)
+      dispatch(eliminarRuta(idRuta))
     }
   }
 
-  useEffect(() => {
-    obtenerRutas()
-  }, [])
 
   return (
     <div className="container mx-auto p-4">

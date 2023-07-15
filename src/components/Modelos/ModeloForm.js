@@ -62,10 +62,10 @@ const ModeloForm = () => {
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="autonomia"
           >
-            Autonomía
+            Autonomía (en kilómetros)
           </label>
           <input
-            type="text"
+            type="number"
             name="autonomia"
             value={modelo.autonomia}
             onChange={handleChange}

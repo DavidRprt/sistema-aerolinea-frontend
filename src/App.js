@@ -7,8 +7,10 @@ import { useDispatch } from "react-redux"
 import { cargarAeropuertos } from "./reducers/aeropuertoReducer"
 import aeropuertosService from "./services/aeropuertosService"
 import avionesService from "./services/avionesService"
+import rutasService from "./services/rutasService"
 import { cargarAviones } from "./reducers/avionReducer"
 import { cargarModelos } from "./reducers/modeloReducer"
+import { cargarRutas } from "./reducers/rutaReducer"
 
 function App() {
   const dispatch = useDispatch()
@@ -19,9 +21,11 @@ function App() {
         const aeropuertos = await aeropuertosService.getAll()
         const aviones = await avionesService.getAll()
         const modelos = await avionesService.getModelos()
+        const rutas = await rutasService.getAll()
         dispatch(cargarAeropuertos(aeropuertos))
         dispatch(cargarAviones(aviones))
         dispatch(cargarModelos(modelos))
+        dispatch(cargarRutas(rutas))
         console.log("Datos cargados exitosamente")
       } catch (error) {
         console.error("Error al cargar los datos:", error)

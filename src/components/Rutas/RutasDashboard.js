@@ -3,7 +3,7 @@ import RutasForm from "./RutasForm"
 
 const RutasDashboard = () => {
   return <div>
-{/*     <RutasForm /> */}
+    <RutasForm />
     <RutasLista />
   </div>
 }

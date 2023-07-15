@@ -43,6 +43,7 @@ const AvionForm = () => {
          ...newAvion,
          modeloavion: { modelo: modeloAvion.modelo },
        } 
+       
       dispatch(agregarAviones(avionConModelo))
       console.log("Avion creado exitosamente")
 
@@ -98,6 +99,8 @@ const AvionForm = () => {
               value={avion.año}
               onChange={handleChange}
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              pattern="\d{4}"
+              title="Ingrese un año válido (ejemplo: 2023)"
               required
             />
           </div>
@@ -109,7 +112,7 @@ const AvionForm = () => {
               Capacidad Turista
             </label>
             <input
-              type="text"
+              type="number"
               name="capacidadturista"
               value={avion.capacidadturista}
               onChange={handleChange}
@@ -125,7 +128,7 @@ const AvionForm = () => {
               Capacidad Premium
             </label>
             <input
-              type="text"
+              type="number"
               name="capacidadpremium"
               value={avion.capacidadpremium}
               onChange={handleChange}
@@ -141,7 +144,7 @@ const AvionForm = () => {
               Capacidad Business
             </label>
             <input
-              type="text"
+              type="number"
               name="capacidadbusiness"
               value={avion.capacidadbusiness}
               onChange={handleChange}
