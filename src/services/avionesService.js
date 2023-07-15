@@ -7,18 +7,29 @@ const getAll = async () => {
   return response.data
 }
 
+const postAvion = async (avion) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:3001/api/aviones`,
+      avion
+    )
+    return response.data
+  } catch (error) {
+    console.error("Error al realizar la solicitud POST:", error)
+    throw error
+  }
+}
+
 const getModelos = async () => {
   const url = `http://localhost:3001/api/modelos`
   const response = await axios.get(url)
-  console.log(response)
   return response.data
 }
 
 const postModelo = async (modelo) => {
   try {
-     const url = `http://localhost:3001/api/modelos`
+    const url = `http://localhost:3001/api/modelos`
     const response = await axios.post(url, modelo)
-    console.log(response.data)
     return response.data
   } catch (error) {
     console.error("Error al realizar la solicitud POST:", error)
@@ -39,5 +50,19 @@ const deleteModelo = async (idModelo) => {
   }
 }
 
+const deleteAvion = async (idAvion) => {
+  try {
+    const response = await axios.delete(`http://localhost:3001/api/aviones`, {
+      data: { idAvion: idAvion },
+    })
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error("Error al realizar la solicitud DELETE:", error)
+    throw error
+  }
+}
+
+
 // eslint-disable-next-line
-export default { getAll, getModelos, postModelo, deleteModelo }
+export default { getAll, getModelos, postModelo, deleteModelo, deleteAvion, postAvion }

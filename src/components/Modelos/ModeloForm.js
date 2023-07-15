@@ -1,7 +1,11 @@
 import React, { useState } from "react"
 import avionesService from "../../services/avionesService"
+import { agregarModelos } from "../../reducers/modeloReducer"
+import { useDispatch } from "react-redux"
 
 const ModeloForm = () => {
+
+  const dispatch = useDispatch()
   const [modelo, setModelo] = useState({
     modelo: "",
     autonomia: "",
@@ -15,7 +19,8 @@ const ModeloForm = () => {
     e.preventDefault()
 
     try {
-      await avionesService.postModelo(modelo)
+      const newModelo = await avionesService.postModelo(modelo)
+      dispatch(agregarModelos(newModelo))
       console.log("Modelo agregado exitosamente")
 
       setModelo({

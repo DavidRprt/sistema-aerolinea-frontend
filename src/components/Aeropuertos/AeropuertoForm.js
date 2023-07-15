@@ -1,7 +1,11 @@
 import React, { useState } from "react"
 import aeropuertosService from "../../services/aeropuertosService"
+import { agregarAeropuerto } from "../../reducers/aeropuertoReducer"
+import { useDispatch } from "react-redux"
 
 const AgregarAeropuerto = () => {
+
+  const dispatch = useDispatch()
   const [aeropuerto, setAeropuerto] = useState({
     idaeropuerto: "",
     nombre: "",
@@ -20,8 +24,8 @@ const AgregarAeropuerto = () => {
     e.preventDefault()
 
     try {
-      console.log(aeropuerto)
       await aeropuertosService.postAeropuerto(aeropuerto)
+      dispatch(agregarAeropuerto(aeropuerto))
       console.log("Aeropuerto creado exitosamente")
 
       setAeropuerto({

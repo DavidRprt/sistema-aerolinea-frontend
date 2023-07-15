@@ -1,29 +1,21 @@
-import React, { useState, useEffect } from "react"
 import aeropuertosService from "../../services/aeropuertosService"
+import { eliminarAeropuerto } from "../../reducers/aeropuertoReducer"
+import { useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
 import { RiDeleteBin5Line } from "react-icons/ri"
 
 const AeropuertosLista = () => {
-  const [aeropuertos, setAeropuertos] = useState([])
+  
+  const dispatch = useDispatch()
+  const aeropuertos = useSelector((state) => state.aeropuertos)
 
-  async function obtenerAeropuertos() {
-    try {
-      const aeropuertos = await aeropuertosService.getAll()
-      setAeropuertos(aeropuertos)
-    } catch (error) {
-      console.error("Error al obtener los aeropuertos:", error)
-    }
-  }
-
-  const confirmarEliminacion = (idAeropuerto) => {
+  const confirmarEliminacion =  async (idAeropuerto) => {
     const confirmacion = window.confirm("¿Estás seguro de eliminar esto?")
     if (confirmacion) {
-      aeropuertosService.deleteAeropuerto(idAeropuerto)
+      await aeropuertosService.deleteAeropuerto(idAeropuerto)
+      dispatch(eliminarAeropuerto(idAeropuerto))
     }
   }
-
-  useEffect(() => {
-    obtenerAeropuertos()
-  }, [])
 
   return (
     <div className="container mx-auto p-4">

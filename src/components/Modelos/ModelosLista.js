@@ -1,29 +1,22 @@
-import React, { useState, useEffect } from "react"
+import { useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
+import { eliminarModelo } from "../../reducers/modeloReducer"
 import avionesService from "../../services/avionesService"
 import { RiDeleteBin5Line } from "react-icons/ri"
 
 const ModelosLista = () => {
-  const [modelos, setModelos] = useState([])
 
-  async function obtenerModelos() {
-    try {
-      const modelos = await avionesService.getModelos()
-      setModelos(modelos)
-    } catch (error) {
-      console.error("Error al obtener los modelos:", error)
-    }
-  }
+  const dispatch = useDispatch()
+  const modelos = useSelector((state) => state.modelos)
 
-  const confirmarEliminacion = (idModelo) => {
+  const confirmarEliminacion = async (idModelo) => {
     const confirmacion = window.confirm("¿Estás seguro de eliminar esto?")
     if (confirmacion) {
-      avionesService.deleteModelo(idModelo)
+      await avionesService.deleteModelo(idModelo)
+      dispatch(eliminarModelo(idModelo))
     }
   }
 
-  useEffect(() => {
-    obtenerModelos()
-  }, [])
 
   return (
     <div className="container mx-auto p-4">

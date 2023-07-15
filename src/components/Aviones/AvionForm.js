@@ -1,33 +1,66 @@
 import React, { useState } from "react"
+import avionesService from "../../services/avionesService"
+import { agregarAviones } from "../../reducers/avionReducer"
+import { useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
+import ModeloAvionSelect from "./ModeloSelect"
 
 const AvionForm = () => {
+
+  const modelos = useSelector((state) => state.modelos)
+
+  const dispatch = useDispatch()
   const [avion, setAvion] = useState({
     nombre: "",
-    anio: "",
-    capacidadTurista: "",
-    capacidadPremium: "",
-    capacidadBusiness: "",
-    idModelo: "",
+    año: "",
+    capacidadturista: "",
+    capacidadpremium: "",
+    capacidadbusiness: "",
+    idmodelo: "",
   })
 
   const handleChange = (e) => {
     setAvion({ ...avion, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e) => {
+   const handleModeloChange = (modeloId) => {
+     setAvion({ ...avion, idmodelo: modeloId })
+   }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Lógica para enviar el objeto `avion` mediante una solicitud POST
-    console.log(avion)
-    // Resetear el formulario
-    setAvion({
+
+    try {
+
+      const newAvion = await avionesService.postAvion(avion)
+   
+       const modeloAvion = modelos.find(
+         (modelo) => modelo.idmodelo == avion.idmodelo
+       )
+
+      
+       const avionConModelo = {
+         ...newAvion,
+         modeloavion: { modelo: modeloAvion.modelo },
+       } 
+      dispatch(agregarAviones(avionConModelo))
+      console.log("Avion creado exitosamente")
+
+      setAvion({
       nombre: "",
-      anio: "",
-      capacidadTurista: "",
-      capacidadPremium: "",
-      capacidadBusiness: "",
-      idModelo: "",
+      año: "",
+      capacidadturista: "",
+      capacidadpremium: "",
+      capacidadbusiness: "",
+      idmodelo: "",
     })
+    } catch (error) {
+      console.error("Error al agregar el avion:", error)
+      window.alert("Ocurrió un error al agregar el avion")
+    }
   }
+
+  
 
   return (
     <div className="container mx-auto p-4">
@@ -55,14 +88,14 @@ const AvionForm = () => {
           <div>
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="anio"
+              htmlFor="año"
             >
               Año
             </label>
             <input
               type="text"
-              name="anio"
-              value={avion.anio}
+              name="año"
+              value={avion.año}
               onChange={handleChange}
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required
@@ -71,14 +104,14 @@ const AvionForm = () => {
           <div>
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="capacidadTurista"
+              htmlFor="capacidadturista"
             >
               Capacidad Turista
             </label>
             <input
               type="text"
-              name="capacidadTurista"
-              value={avion.capacidadTurista}
+              name="capacidadturista"
+              value={avion.capacidadturista}
               onChange={handleChange}
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required
@@ -87,14 +120,14 @@ const AvionForm = () => {
           <div>
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="capacidadPremium"
+              htmlFor="capacidadpremium"
             >
               Capacidad Premium
             </label>
             <input
               type="text"
-              name="capacidadPremium"
-              value={avion.capacidadPremium}
+              name="capacidadpremium"
+              value={avion.capacidadpremium}
               onChange={handleChange}
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required
@@ -103,14 +136,14 @@ const AvionForm = () => {
           <div>
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="capacidadBusiness"
+              htmlFor="capacidadbusiness"
             >
               Capacidad Business
             </label>
             <input
               type="text"
-              name="capacidadBusiness"
-              value={avion.capacidadBusiness}
+              name="capacidadbusiness"
+              value={avion.capacidadbusiness}
               onChange={handleChange}
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required
@@ -119,17 +152,13 @@ const AvionForm = () => {
           <div>
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="idModelo"
+              htmlFor="idmodelo"
             >
               ID Modelo
             </label>
-            <input
-              type="text"
-              name="idModelo"
-              value={avion.idModelo}
-              onChange={handleChange}
-              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
+            <ModeloAvionSelect
+              value={avion.idmodelo}
+              onChange={handleModeloChange}
             />
           </div>
         </div>
