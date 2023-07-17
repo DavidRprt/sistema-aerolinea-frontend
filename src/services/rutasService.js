@@ -23,7 +23,6 @@ const postRuta = async (ruta) => {
 
 const deleteRuta = async (idRuta) => {
   try {
-    console.log("IM HEREEE,", idRuta)
     const response = await axios.delete(url, {
       data: { idruta: idRuta },
     })

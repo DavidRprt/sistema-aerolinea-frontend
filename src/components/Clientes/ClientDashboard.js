@@ -1,11 +1,13 @@
 import SearchClientCard from "./SearchClientCard"
-import ClientInfo from "./ClientInfo"
+import RegistrarCliente from "./RegistrarClienteForm"
+import ClientesLista from "./ClientesLista"
 
 const ClientDashboard = () => {
   return (
     <div>
+      <RegistrarCliente />
       <SearchClientCard />
-      <ClientInfo />
+      <ClientesLista />
     </div>
   )
 }

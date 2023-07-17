@@ -1,39 +1,93 @@
-import { useState } from "react"
+import React, { useState } from "react"
+import { useDispatch } from "react-redux"
+import clientesService from "../../services/clientesService"
+import { cargarClientes } from "../../reducers/clienteReducer" 
+const BuscarCliente = () => {
+  const [searchQuery, setSearchQuery] = useState("")
+  const [searchType, setSearchType] = useState({
+    type: "pasaporte",
+    label: "Pasaporte",
+  })
 
-const SearchClientCard = () => {
-  const [user, setUser] = useState("")
+  const dispatch = useDispatch() 
 
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    // Agregar logica del submit
+  const handleChange = (e) => {
+    setSearchQuery(e.target.value)
+  }
+
+  const handleSelectChange = (e) => {
+    setSearchType({
+      type: e.target.value,
+      label: e.target.options[e.target.selectedIndex].text,
+    })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const busqueda = { busqueda: searchQuery }
+
+    try {
+      if (searchType.type === "pasaporte") {
+        const response = await clientesService.getClientesPasaporte(
+          busqueda.busqueda
+        )
+        console.log(response)
+        dispatch(cargarClientes(response)) 
+      } else if (searchType.type === "email") {
+        const response = await clientesService.getClientesEmail(
+          busqueda.busqueda
+        )
+        console.log(response)
+        dispatch(cargarClientes(response)) 
+      }
+    } catch (error) {
+      console.error("Error al obtener clientes:", error)
+    }
   }
 
   return (
-    <div className="mx-4 w-auto bg-white rounded-xl shadow-md overflow-hidden md:w-auto m-3 p-4">
-      <h2 className="text-xl mb-4">Encontrar Cliente</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="container mx-auto p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-4 border border-gray-300 rounded"
+      >
         <div className="mb-4">
-          <label className="block text-sm mb-2" htmlFor="flightCode">
-            Código de cliente
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="searchType"
+          >
+            Buscar cliente por:
           </label>
+          <select
+            value={searchType.type}
+            onChange={handleSelectChange}
+            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          >
+            <option value="pasaporte">Pasaporte</option>
+            <option value="email">Email</option>
+          </select>
+        </div>
+        <div className="mb-4">
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="flightCode"
             type="text"
-            placeholder="Ingresar código de vuelo"
-            value={user}
-            onChange={(event) => setUser(event.target.value)}
+            name="searchQuery"
+            value={searchQuery}
+            onChange={handleChange}
+            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
           />
         </div>
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="submit"
-        >
-          Buscar
-        </button>
+        <div className="flex items-center justify-end">
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Buscar
+          </button>
+        </div>
       </form>
     </div>
   )
 }
 
-export default SearchClientCard
+export default BuscarCliente
