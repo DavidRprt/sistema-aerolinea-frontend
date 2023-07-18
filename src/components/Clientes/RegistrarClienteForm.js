@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import clientesService from "../../services/clientesService"
 
 const AgregarCliente = () => {
   const [cliente, setCliente] = useState({
@@ -7,16 +8,38 @@ const AgregarCliente = () => {
     pasaporte: "",
     email: "",
     telefono: "",
+    millas: 0
   })
 
-  const handleChange = (e) => {
-    setCliente({ ...cliente, [e.target.name]: e.target.value })
-  }
+   const handleChange = (e) => {
+     setCliente({ ...cliente, [e.target.name]: e.target.value })
+   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    console.log(cliente)
-  }
+   const handleSubmit = async (e) => {
+     e.preventDefault()
+
+     // Verificar si el campo de telefono está vacío y establecer el valor en null si es así
+     const telefono = cliente.telefono.trim() === "" ? null : cliente.telefono
+
+     // Crear un nuevo objeto de cliente con el valor actualizado del telefono
+     const nuevoCliente = {
+       ...cliente,
+       telefono,
+     }
+
+     // Enviar el cliente al servicio
+     clientesService.postCliente(nuevoCliente)
+
+     // Limpiar el formulario borrando los datos
+     setCliente({
+       nombre: "",
+       apellido: "",
+       pasaporte: "",
+       email: "",
+       telefono: "",
+       millas: 0,
+     })
+   }
 
   return (
     <div className="container mx-auto p-4">

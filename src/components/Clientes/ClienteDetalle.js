@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import clientesService from "../../services/clientesService"
@@ -8,6 +8,7 @@ const ClienteDetalle = () => {
   const { id } = useParams()
   const clientes = useSelector((state) => state.clientes.clientes)
   const clienteCargado = useSelector((state) => state.clientes.clienteCargado)
+  console.log(clienteCargado)
 
    const getStatus = (millas) => {
      if (millas === 0) {
@@ -20,30 +21,6 @@ const ClienteDetalle = () => {
        return "Platinum"
      }
    }
-
-  const [pasajes, setPasajes] = useState([
-    {
-      id: 1,
-      origen: "Ciudad A",
-      destino: "Ciudad B",
-      fechaIda: "2023-07-20",
-      fechaVuelta: "2023-07-25",
-    },
-    {
-      id: 2,
-      origen: "Ciudad B",
-      destino: "Ciudad C",
-      fechaIda: "2023-08-10",
-      fechaVuelta: "2023-08-15",
-    },
-    {
-      id: 3,
-      origen: "Ciudad C",
-      destino: "Ciudad D",
-      fechaIda: "2023-09-05",
-      fechaVuelta: "2023-09-10",
-    },
-  ])
 
   const dispatch = useDispatch()
 
@@ -113,23 +90,47 @@ const ClienteDetalle = () => {
           <div>
             <h2 className="text-2xl font-bold">Pasajes Asociados</h2>
             <ul>
-              {pasajes.map((pasaje) => (
-                <li key={pasaje.id} className="my-2">
-                  <span className="font-semibold">Origen:</span> {pasaje.origen}
-                  , <span className="font-semibold">Destino:</span>{" "}
-                  {pasaje.destino}
-                  <br />
-                  <span className="font-semibold">Fecha de Ida:</span>{" "}
-                  {pasaje.fechaIda},{" "}
-                  <span className="font-semibold">Fecha de Vuelta:</span>{" "}
-                  {pasaje.fechaVuelta}
+              {clienteCargado.pasajes.map((pasaje) => (
+                <li key={pasaje.idpasaje} className="my-2 flex-col">
+                  <div className="flex gap-1 text-xl">
+                    <div className="font-semibold">Codigo de pasaje:</div>
+                    <div> {pasaje.idpasaje}</div>
+                  </div>
+                  <div className="flex gap-1">
+                    <div className="font-semibold">Origen:</div>
+                    <div> {pasaje.rutum.idorigen}</div>
+                  </div>
+                  <div className="flex gap-1">
+                    <div className="font-semibold">Destino:</div>
+                    <div> {pasaje.rutum.iddestino} </div>
+                  </div>
+                  <div className="flex gap-1">
+                    <div className="font-semibold">Fecha de Ida:</div>
+                    <div>{pasaje.fechaida}</div>
+                  </div>
+                  <div className="flex gap-1">
+                    <div className="font-semibold">Fecha de Vuelta:</div>
+                    <div> {pasaje.fechavuelta}</div>
+                  </div>
+                  <div className="flex gap-1">
+                    <div className="font-semibold">Horario:</div>
+                    <div> {pasaje.rutum.horariosalida}</div>
+                  </div>
+                  <div className="flex gap-1">
+                    <div className="font-semibold">Duración:</div>
+                    <div> {pasaje.rutum.duracion} horas </div>
+                  </div>
+                  <div className="flex gap-1">
+                    <div className="font-semibold">Avión:</div>
+                    <div> {pasaje.rutum.avion.nombre} </div>
+                  </div>
                 </li>
               ))}
             </ul>
           </div>
         </div>
       ) : (
-        <p>No se han encontrado clientes.</p>
+        <p>No se ha encontrado el cliente.</p>
       )}
     </div>
   )

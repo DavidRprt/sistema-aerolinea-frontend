@@ -36,6 +36,18 @@ const clientesService = {
     }
   },
 
+
+ postCliente: async (cliente) => {
+  try {
+    const response = await axios.post(baseURL, cliente)
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error("Error al realizar la solicitud POST:", error)
+    throw error
+  }
+},
+
   getClienteById: async (idcliente) => {
     try {
       const response = await axios.get(`${baseURL}/${idcliente}`)
