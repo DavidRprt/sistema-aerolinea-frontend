@@ -4,7 +4,6 @@ const AgregarCliente = () => {
   const [cliente, setCliente] = useState({
     nombre: "",
     apellido: "",
-    contrasena: "",
     pasaporte: "",
     email: "",
     telefono: "",
@@ -16,7 +15,7 @@ const AgregarCliente = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-   console.log(cliente)
+    console.log(cliente)
   }
 
   return (
@@ -53,22 +52,6 @@ const AgregarCliente = () => {
               type="text"
               name="apellido"
               value={cliente.apellido}
-              onChange={handleChange}
-              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="contrasena"
-            >
-              Contraseña
-            </label>
-            <input
-              type="password"
-              name="contrasena"
-              value={cliente.contrasena}
               onChange={handleChange}
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required
@@ -119,7 +102,6 @@ const AgregarCliente = () => {
               value={cliente.telefono}
               onChange={handleChange}
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
             />
           </div>
         </div>

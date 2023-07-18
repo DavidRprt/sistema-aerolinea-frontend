@@ -8,6 +8,7 @@ import AeropuertosDashboard from "../components/Aeropuertos/AeropuertosDashboard
 import AvionesDashboard from "../components/Aviones/AvionesDashboard"
 import ModelosDashboard from "../components/Modelos/ModelosDashboard"
 import RutasDashboard from "../components/Rutas/RutasDashboard"
+import ClienteDetalle from "../components/Clientes/ClienteDetalle"
 
 const RoutesConfig = () => {
   return (
@@ -20,6 +21,7 @@ const RoutesConfig = () => {
       <Route path="/aeropuertos" element={<AeropuertosDashboard />} />
       <Route path="/aviones" element={<AvionesDashboard />} />
       <Route path="/modelos" element={<ModelosDashboard />} />
+      <Route path="/usuarios/:id" element={<ClienteDetalle />} />
     </Routes>
   )
 }
