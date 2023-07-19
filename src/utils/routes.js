@@ -1,8 +1,8 @@
 import React from "react"
 import { Route, Routes } from "react-router-dom"
 import HomeDashboard from "../components/Home/HomeDashboard"
-import TicketsDashboard from "../components/Tickets/TicketsDashboard"
-import FlightResultsDashboard from "../components/Tickets/FlightResultsDashboard"
+import PasajesDashboard from "../components/Pasajes/PasajesDashboard"
+import FlightResultsDashboard from "../components/Pasajes/FlightResultsDashboard"
 import ClientDashboard from "../components/Clientes/ClientDashboard"
 import AeropuertosDashboard from "../components/Aeropuertos/AeropuertosDashboard"
 import AvionesDashboard from "../components/Aviones/AvionesDashboard"
@@ -14,7 +14,7 @@ const RoutesConfig = () => {
   return (
     <Routes>
       <Route path="/" element={<HomeDashboard />} />
-      <Route path="/pasajes" element={<TicketsDashboard />} />
+      <Route path="/pasajes" element={<PasajesDashboard />} />
       <Route path="/resultados" element={<FlightResultsDashboard />} />
       <Route path="/usuarios" element={<ClientDashboard />} />
       <Route path="/rutas" element={<RutasDashboard />} />

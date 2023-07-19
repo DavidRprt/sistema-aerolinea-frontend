@@ -18,7 +18,7 @@ const ClientesLista = () => {
             <th className="py-2 px-4 border-b">Nombre</th>
             <th className="py-2 px-4 border-b">Apellido</th>
             <th className="py-2 px-4 border-b">Pasaporte</th>
-            <th className="py-2 px-4 border-b">Reservas Activas</th>
+            <th className="py-2 px-4 border-b">Email</th>
             <th className="py-2 px-4 border-b">Millas</th>
             <th className="py-2 px-4 border-b">Gestionar</th>
           </tr>
@@ -36,7 +36,7 @@ const ClientesLista = () => {
                 {cliente.pasaporte}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                0
+                {cliente.email}
               </td>
               <td className="py-2 px-4 border-b text-center">
                 {cliente.millas}

@@ -5,6 +5,8 @@ import {
   MdAirlineSeatReclineExtra,
   MdAirlineSeatFlat,
 } from "react-icons/md"
+import { useSelector } from "react-redux"
+
 
 const flightData = [
   {
@@ -40,11 +42,13 @@ const flightData = [
 const FlightResultsDashboard = () => {
   const navigate = useNavigate()
   const [selectedFlight, setSelectedFlight] = React.useState(null)
+  const busqueda = useSelector((state) => state.busqueda)
+  console.log(busqueda)
 
   return (
-    <div className="mx-4 w-auto bg-white rounded-xl shadow-md overflow-hidden md:w-auto m-3 p-4 flex flex-col">
-      <div className="overflow-auto h-96">
-        <table>
+    <div className="container mx-auto p-4">
+      <div className="">
+        <table className="min-w-full bg-white border border-gray-300">
           <thead>
             <tr>
               <th className="px-5 py-3 border-b-2 border-gray-200 text-gray-600">
