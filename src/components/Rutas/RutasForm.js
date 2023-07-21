@@ -41,6 +41,7 @@ const AgregarRuta = () => {
       const newRuta = await rutasService.postRuta(ruta)
 
       const avion = aviones.find(
+        // eslint-disable-next-line
         (avion) => avion.idavion == ruta.idavion
       )
 

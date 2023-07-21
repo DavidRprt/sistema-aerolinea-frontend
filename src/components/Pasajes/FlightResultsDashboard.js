@@ -1,140 +1,124 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import {
-  MdAirlineSeatReclineNormal,
-  MdAirlineSeatReclineExtra,
-  MdAirlineSeatFlat,
-} from "react-icons/md"
 import { useSelector } from "react-redux"
-
-
-const flightData = [
-  {
-    id: 1,
-    from: "Buenos Aires",
-    to: "New York",
-    departure: "15/06/2023 10:30",
-    arrival: "15/06/2023 20:30",
-    duration: "10h",
-    days: ["Lun", "Mie", "Vie"],
-    aircraft: "Airbus A380",
-    economyPrice: 600,
-    premiumEconomyPrice: 900,
-    businessPrice: 1300,
-    flightNumber: "AR1234",
-  },
-  {
-    id: 2,
-    from: "Buenos Aires",
-    to: "Cordoba",
-    departure: "16/06/2023 09:30",
-    arrival: "16/06/2023 11:00",
-    duration: "1h 30m",
-    days: ["Mar", "Jue", "Sab"],
-    aircraft: "Airbus A320",
-    economyPrice: 100,
-    premiumEconomyPrice: 150,
-    businessPrice: 200,
-    flightNumber: "AR5678",
-  }
-]
+import rutasService from "../../services/rutasService"
+import SelectDate from "./selectDates"
+import FlightPrices from "./FlightPrices"
+import VueloForm from "./VueloForm"
 
 const FlightResultsDashboard = () => {
+
   const navigate = useNavigate()
-  const [selectedFlight, setSelectedFlight] = React.useState(null)
+  const [vuelos, setVuelos] = useState([])
+  const [selectedClass, setSelectedClass] = useState("") 
+  const [selectedDate, setSelectedDate] = useState("")
   const busqueda = useSelector((state) => state.busqueda)
-  console.log(busqueda)
+
+useEffect(() => {
+  const obtenerVuelos = async () => {
+    try {
+      const vuelosObtenidos = await rutasService.getRutasByAirport(
+        busqueda.idorigen,
+        busqueda.iddestino
+      )
+      setVuelos(vuelosObtenidos) // Actualizar el estado con los vuelos obtenidos
+    } catch (error) {
+      console.error("Error al obtener los vuelos:", error)
+    }
+  }
+
+  obtenerVuelos()
+}, [busqueda.idorigen, busqueda.iddestino])
+
+const getDaysOfMonthWithWeekdays = (dateString) => {
+  const daysOfMonth = []
+  const daysOfWeek = [
+    "domingo",
+    "lunes",
+    "martes",
+    "miercoles",
+    "jueves",
+    "viernes",
+    "sabado",
+  ]
+
+  const year = parseInt(dateString.slice(0, 4))
+  const month = parseInt(dateString.slice(5, 7)) - 1 // Restamos 1 porque los meses son 0-based en JavaScript
+
+  for (let day = 1; day <= 31; day++) {
+    const date = new Date(year, month, day)
+
+    if (date.getMonth() !== month) {
+      // Salir del ciclo si llegamos al final del mes
+      break
+    }
+
+    const dayOfWeekName = daysOfWeek[date.getDay()]
+    if (dayOfWeekName) {
+      daysOfMonth.push({
+        fecha: date.toISOString().slice(0, 10),
+        dia: dayOfWeekName,
+      })
+    }
+  }
+
+  return daysOfMonth
+}
+
+const daysOfMonthWithWeekdays = getDaysOfMonthWithWeekdays(busqueda.fechhaida)
+
+const filteredDays = daysOfMonthWithWeekdays.filter((day) => {
+  const weekday = day.dia.toLowerCase()
+  const flightAvailabilityForDay =
+    vuelos.length > 0 ? vuelos[0][weekday] : false
+  return flightAvailabilityForDay
+})
+
+  const handleContinue = () => {
+    const checkoutData = {
+      idcliente: null,
+      idruta: vuelos[0].idruta,
+      idclase: selectedClass, // Usamos el estado para el valor seleccionado en el radio button
+      fechaida: selectedDate, // Usamos el estado para la fecha seleccionada en el componente SelectDate
+      fechavuelta: "",
+    }
+
+    if (!checkoutData.fechaida) {
+      // Mostrar mensaje si la fecha seleccionada está vacía
+      alert("Por favor, seleccione una fecha.")
+    } else if (!checkoutData.idclase) {
+      // Mostrar mensaje si la clase seleccionada está vacía
+      alert("Por favor, seleccione una clase.")
+    } else if (!busqueda.oneway && !checkoutData.fechavuelta) {
+      // Mostrar mensaje si es viaje de ida y vuelta pero no se ha seleccionado la fecha de vuelta
+      alert("Por favor, seleccione la fecha de vuelta.")
+    } else {
+      // Si todo está bien, mostrar confirmación antes de redireccionar
+      navigate("/checkout") // Redireccionar a la página "/checkout"
+    }
+    console.log(checkoutData) // Imprimir el objeto construido
+
+  
+  }
+
 
   return (
     <div className="container mx-auto p-4">
-      <div className="">
-        <table className="min-w-full bg-white border border-gray-300">
-          <thead>
-            <tr>
-              <th className="px-5 py-3 border-b-2 border-gray-200 text-gray-600">
-                Número de Vuelo
-              </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 text-gray-600">
-                Vuelo
-              </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 text-gray-600">
-                Salida
-              </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 text-gray-600">
-                Llegada
-              </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 text-gray-600">
-                Duración
-              </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 text-gray-600">
-                Dias
-              </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 text-gray-600">
-                Avión
-              </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 text-gray-600">
-                Precios
-              </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 text-gray-600"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {flightData.map((flight) => (
-              <tr key={flight.id}>
-                <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                  {flight.flightNumber}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                  {flight.from} - {flight.to}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                  {flight.departure}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                  {flight.arrival}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                  {flight.duration}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                  {flight.days.join(", ")}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                  {flight.aircraft}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                  <div className="flex items-center gap-1">
-                    <MdAirlineSeatReclineNormal className="text-xl" /> $
-                    {flight.economyPrice} <br />
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <MdAirlineSeatReclineExtra className="text-xl" /> $
-                    {flight.premiumEconomyPrice} <br />
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <MdAirlineSeatFlat className="text-xl" /> $
-                    {flight.businessPrice} <br />
-                  </div>
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                  <button
-                    className={`px-0 py-2 rounded text-white w-28 ${
-                      selectedFlight === flight.id
-                        ? "bg-green-800"
-                        : "bg-green-500"
-                    }`}
-                    onClick={() => setSelectedFlight(flight.id)}
-                  >
-                    {selectedFlight === flight.id
-                      ? "Seleccionado"
-                      : "Seleccionar"}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <VueloForm 
+      vuelos={vuelos}
+      filteredDays={filteredDays}
+      setSelectedClass={selectedClass}
+      setSelectedDate={selectedDate}
+      selectedClass={selectedClass}
+      />
+      {!busqueda.oneway && (
+        <div>
+          <h2 className="text-xl mt-4">
+            Aqui se encuentra el componente para el viaje de vuelta
+          </h2>
+          {/* Agregar aquí el código para mostrar los vuelos de vuelta */}
+        </div>
+      )}
       <div className="flex justify-between mt-4">
         <button
           className="bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-4 rounded mr-2"
@@ -144,7 +128,7 @@ const FlightResultsDashboard = () => {
         </button>
         <button
           className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => navigate("/checkout")}
+          onClick={handleContinue} // Llamamos a la función handleContinue al hacer clic en el botón "Continuar"
         >
           Continuar
         </button>

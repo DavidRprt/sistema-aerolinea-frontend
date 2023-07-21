@@ -8,6 +8,16 @@ const getAll = async () => {
   return response.data
 }
 
+const getRutasByAirport = async (idorigen, iddestino) => {
+  try {
+    const response = await axios.get(`${url}/${idorigen}/${iddestino}`)
+    return response.data
+  } catch (error) {
+    console.error("Error al obtener las rutas:", error)
+    throw new Error("Error al obtener las rutas")
+  }
+}
+
 const postRuta = async (ruta) => {
   try {
     const response = await axios.post(
@@ -36,4 +46,4 @@ const deleteRuta = async (idRuta) => {
 
 
 // eslint-disable-next-line
-export default { getAll, postRuta, deleteRuta }
+export default { getAll, postRuta, deleteRuta, getRutasByAirport }

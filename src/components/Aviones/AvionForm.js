@@ -35,6 +35,7 @@ const AvionForm = () => {
       const newAvion = await avionesService.postAvion(avion)
    
        const modeloAvion = modelos.find(
+         // eslint-disable-next-line
          (modelo) => modelo.idmodelo == avion.idmodelo
        )
 
