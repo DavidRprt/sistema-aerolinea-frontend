@@ -9,6 +9,7 @@ import AvionesDashboard from "../components/Aviones/AvionesDashboard"
 import ModelosDashboard from "../components/Modelos/ModelosDashboard"
 import RutasDashboard from "../components/Rutas/RutasDashboard"
 import ClienteDetalle from "../components/Clientes/ClienteDetalle"
+import Checkout from "../components/Pasajes/Checkout"
 
 const RoutesConfig = () => {
   return (
@@ -16,6 +17,7 @@ const RoutesConfig = () => {
       <Route path="/" element={<HomeDashboard />} />
       <Route path="/pasajes" element={<PasajesDashboard />} />
       <Route path="/resultados" element={<FlightResultsDashboard />} />
+      <Route path="/checkout" element={<Checkout />} />
       <Route path="/usuarios" element={<ClientDashboard />} />
       <Route path="/rutas" element={<RutasDashboard />} />
       <Route path="/aeropuertos" element={<AeropuertosDashboard />} />

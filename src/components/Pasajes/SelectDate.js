@@ -7,9 +7,9 @@ const SelectDate = ({ filteredDates, setSelectedDate }) => {
       onChange={(e) => setSelectedDate(e.target.value)}
     >
       <option value="">Seleccionar fecha</option>
-      {filteredDates.map((date) => (
-        <option key={date.fecha} value={date.fecha}>
-          {date.fecha} - {date.dia}
+      {filteredDates.map((date, index) => (
+        <option key={index} value={date}>
+          {date}
         </option>
       ))}
     </select>
@@ -17,4 +17,3 @@ const SelectDate = ({ filteredDates, setSelectedDate }) => {
 }
 
 export default SelectDate
-
