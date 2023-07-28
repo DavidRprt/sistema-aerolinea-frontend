@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import rutasService from "../../services/rutasService"
 import VueloForm from "./VueloForm"
+import Checkout from "./Checkout"
 import { useNavigate } from "react-router-dom"
 
 const FlightsResultDashboard = () => {
@@ -12,6 +13,7 @@ const FlightsResultDashboard = () => {
   const [vuelosVuelta, setVuelosVuelta] = useState([])
   const [reservaIda, setReservaIda] = useState({})
   const [reservaVuelta, setReservaVuelta] = useState({})
+  const [showCheckout, setShowCheckout] = useState(false)
 
   const handleContinue = () => {
     // Si es solo ida y los campos requeridos de reservaIda están vacíos
@@ -27,7 +29,7 @@ const FlightsResultDashboard = () => {
     }
 
     // Si todo está bien, imprime los objetos de reserva
-    navigate("/checkout")
+    setShowCheckout(true)
     console.log("Reserva de ida:", reservaIda)
     if (!busqueda.oneway) console.log("Reserva de vuelta:", reservaVuelta)
   }
@@ -55,6 +57,11 @@ const FlightsResultDashboard = () => {
 
     buscarVuelos()
   }, [busqueda, dispatch])
+
+  if (showCheckout) {
+    return <Checkout oneway={busqueda.oneway} vueloIda={reservaIda} vueloVuelta={reservaVuelta}/>
+  }
+
 
   return (
     <div>
