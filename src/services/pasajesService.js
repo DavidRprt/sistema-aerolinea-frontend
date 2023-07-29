@@ -12,5 +12,15 @@ const getPasajesByAirport = async (idorigen, iddestino) => {
   }
 }
 
+const crearPasaje = async (pasaje) => {
+  try {
+    const response = await axios.post(url, pasaje)
+    return response.data
+  } catch (error) {
+    console.error("Error al crear el pasaje:", error)
+    throw new Error("Error al crear el pasaje")
+  }
+}
+
 // eslint-disable-next-line
-export default { getPasajesByAirport }
+export default { getPasajesByAirport, crearPasaje }
