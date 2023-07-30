@@ -1,57 +1,50 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import clientesService from "../../services/clientesService"
+import { Spin } from "antd"
 import { cargarSingleCliente } from "../../reducers/clienteReducer"
 
 const ClienteDetalle = () => {
   const { id } = useParams()
-  const clientes = useSelector((state) => state.clientes.clientes)
   const clienteCargado = useSelector((state) => state.clientes.clienteCargado)
   console.log(clienteCargado)
 
-   const getStatus = (millas) => {
-     if (millas === 0) {
-       return "N/A"
-     } else if (millas < 1500) {
-       return "Silver"
-     } else if (millas < 3000) {
-       return "Gold"
-     } else {
-       return "Platinum"
-     }
-   }
-
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    // Primero verificamos si el cliente está cargado en el estado de Redux
-    const clienteExistente = clientes.find(
-      (cliente) => cliente.idcliente === Number(id)
-    )
-  
-    if (!clienteExistente) {
-      // Si el cliente no se encuentra en el estado de Redux, lo buscamos desde el backend
-   
-      obtenerClientePorIdDesdeBackend(id)
+  const getStatus = (millas) => {
+    if (millas === 0) {
+      return "N/A"
+    } else if (millas < 1500) {
+      return "Silver"
+    } else if (millas < 3000) {
+      return "Gold"
     } else {
-      // Si el cliente está en el estado de Redux, lo guardamos en la propiedad clienteCargado
-      console.log(clienteExistente)
-      dispatch(cargarSingleCliente(clienteExistente))
-    }
-  })
-
-  const obtenerClientePorIdDesdeBackend = async (id) => {
-    try {
-      const cliente = await clientesService.getClienteById(id)
-      // Enviamos el cliente al estado de Redux en la propiedad clienteCargado
-      dispatch(cargarSingleCliente(cliente))
-    } catch (error) {
-      console.error("Error al obtener el cliente desde el backend:", error)
+      return "Platinum"
     }
   }
 
- 
+  const dispatch = useDispatch()
+
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchCliente = async () => {
+      try {
+        const cliente = await clientesService.getClienteById(id)
+        dispatch(cargarSingleCliente(cliente))
+      } catch (error) {
+        console.error("Error al obtener el cliente desde el backend:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchCliente()
+  }, [id, dispatch])
+
+  // Muestra un indicador de carga si los datos están cargándose
+  if (loading) {
+    return <Spin size="large" />
+  }
+
   return (
     <div className="container mx-auto p-4 flex items-center">
       {clienteCargado ? (
@@ -105,12 +98,8 @@ const ClienteDetalle = () => {
                     <div> {pasaje.rutum.iddestino} </div>
                   </div>
                   <div className="flex gap-1">
-                    <div className="font-semibold">Fecha de Ida:</div>
-                    <div>{pasaje.fechaida}</div>
-                  </div>
-                  <div className="flex gap-1">
-                    <div className="font-semibold">Fecha de Vuelta:</div>
-                    <div> {pasaje.fechavuelta}</div>
+                    <div className="font-semibold">Fecha:</div>
+                    <div>{pasaje.fecha}</div>
                   </div>
                   <div className="flex gap-1">
                     <div className="font-semibold">Horario:</div>

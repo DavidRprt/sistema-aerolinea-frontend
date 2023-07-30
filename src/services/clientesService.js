@@ -13,6 +13,16 @@ const clientesService = {
     }
   },
 
+   updateClienteMillas: async (idcliente, millas) => {
+    try {
+      const response = await axios.patch(`${baseURL}/${idcliente}`, { millas })
+      return response.data
+    } catch (error) {
+      console.error("Error al actualizar las millas del cliente:", error)
+      throw error
+    }
+  },
+
   getClientesPasaporte: async (busqueda) => {
     const url = `${baseURL}/pasaporte/${busqueda}`
     try {

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react"
 import reservaService from "../../services/reservaService"
 import pasajesService from "../../services/pasajesService"
+import clientesService from "../../services/clientesService"
+import { useNavigate } from "react-router-dom"
 
 const ReservaCompra = ({ vuelos }) => {
   const [metodoPago, setMetodoPago] = useState("") // Estado para almacenar el método de pago seleccionado
   const [precioTotal, setPrecioTotal] = useState(0) // Estado para almacenar el precio total de la reserva
+  const navigate = useNavigate()
 
   // Calcula el precio total de la reserva cuando el componente se monta o los vuelos cambian
   useEffect(() => {
@@ -13,26 +16,48 @@ const ReservaCompra = ({ vuelos }) => {
   }, [vuelos])
 
   const handleConfirm = async () => {
-    const fecha = new Date();
-  const year = fecha.getFullYear();
-  const month = String(fecha.getMonth() + 1).padStart(2, '0') // Los meses en JavaScript empiezan desde 0
-  const day = String(fecha.getDate()).padStart(2, '0')
-  const fechaemision = `${year}-${month}-${day}`
+    const fecha = new Date()
+    const year = fecha.getFullYear()
+    const month = String(fecha.getMonth() + 1).padStart(2, "0") // Los meses en JavaScript empiezan desde 0
+    const day = String(fecha.getDate()).padStart(2, "0")
+    const fechaemision = `${year}-${month}-${day}`
 
-  try {
-    const idReserva = await reservaService.crearReserva({
-      idmetodo: metodoPago,
-      fechaemision: fechaemision,
-      preciototal: precioTotal,
-    })
-    vuelos = vuelos.map((vuelo) => ({
-      ...vuelo,
-      idreserva: idReserva,
-    }))
+    try {
+      const idReserva = await reservaService.crearReserva({
+        idmetodo: metodoPago,
+        fechaemision: fechaemision,
+        preciototal: precioTotal,
+      })
+      vuelos = vuelos.map((vuelo) => ({
+        ...vuelo,
+        idreserva: idReserva,
+      }))
+      const promises = vuelos.map((vuelo) => {
+        const pasaje = {
+          idcliente: vuelo.idcliente,
+          idruta: vuelo.idruta,
+          idclase: vuelo.idclase,
+          idreserva: vuelo.idreserva,
+          fecha: vuelo.fecha,
+          precio: vuelo.precio,
+        }
+        return pasajesService.crearPasaje(pasaje)
+      })
 
-  } catch (error) {
-    console.error('Error al confirmar la reserva:', error)
-  }
+      await Promise.all(promises)
+
+     const millas = Math.round(precioTotal / vuelos.length)
+     const updatePromises = vuelos.map((vuelo) => {
+       return clientesService.updateClienteMillas(vuelo.idcliente, millas)
+     })
+
+     await Promise.all(updatePromises)
+
+      // Redirige al usuario a su página después de que la compra se realiza correctamente
+      navigate(`/usuarios/${vuelos[0].idcliente}`)
+    } catch (error) {
+      console.error("Error al confirmar la reserva:", error)
+    }
   }
 
   const handlePaymentMethodChange = (event) => {
