@@ -5,6 +5,7 @@ import modeloReducer from "../reducers/modeloReducer"
 import rutaReducer from "../reducers/rutaReducer"
 import clienteReducer from "../reducers/clienteReducer"
 import busquedaReducer from "../reducers/busquedaReducer"
+import userReducer from "../reducers/userReducer"
 
 const store = configureStore({
   reducer: {
@@ -13,7 +14,8 @@ const store = configureStore({
     modelos: modeloReducer,
     rutas: rutaReducer,
     clientes: clienteReducer,
-    busqueda: busquedaReducer
+    busqueda: busquedaReducer,
+    user: userReducer
   },
 })
 
