@@ -11,28 +11,51 @@ import ModelosDashboard from "../components/Modelos/ModelosDashboard"
 import RutasDashboard from "../components/Rutas/RutasDashboard"
 import ClienteDetalle from "../components/Clientes/ClienteDetalle"
 import Checkout from "../components/Pasajes/Checkout"
-import LoginForm from "../components/LoginForm"
+import LoginForm from "../components/Login/LoginForm"
 import NotFound from "../components/NotFound"
-import SignUpForm from "../components/SignUpForm"
+import SignUpForm from "../components//Login/SignUpForm"
 
 const RoutesConfig = () => {
   return (
     <Routes>
       <Route path="/" element={<HomeDashboard />} />
       <Route path="/login" element={<LoginForm />} />
-      <Route path="signup" element={<SignUpForm />} />
+      <Route path="/signup" element={<SignUpForm />} />
       <Route path="*" element={<NotFound />} />
-      <Route element={<PrivateRoute />}>
-        <Route path="/rutas" element={<RutasDashboard />} />
-        <Route path="/pasajes" element={<PasajesDashboard />} />
-        <Route path="/resultados" element={<FlightResultsDashboard />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/usuarios" element={<ClientDashboard />} />
-        <Route path="/aeropuertos" element={<AeropuertosDashboard />} />
-        <Route path="/aviones" element={<AvionesDashboard />} />
-        <Route path="/modelos" element={<ModelosDashboard />} />
-        <Route path="/usuarios/:id" element={<ClienteDetalle />} />
-      </Route>
+
+      <Route
+        path="/rutas"
+        element={<PrivateRoute component={RutasDashboard} />}
+      />
+      <Route
+        path="/pasajes"
+        element={<PrivateRoute component={PasajesDashboard} />}
+      />
+      <Route
+        path="/resultados"
+        element={<PrivateRoute component={FlightResultsDashboard} />}
+      />
+      <Route path="/checkout" element={<PrivateRoute component={Checkout} />} />
+      <Route
+        path="/usuarios"
+        element={<PrivateRoute component={ClientDashboard} />}
+      />
+      <Route
+        path="/aeropuertos"
+        element={<PrivateRoute component={AeropuertosDashboard} />}
+      />
+      <Route
+        path="/aviones"
+        element={<PrivateRoute component={AvionesDashboard} />}
+      />
+      <Route
+        path="/modelos"
+        element={<PrivateRoute component={ModelosDashboard} />}
+      />
+      <Route
+        path="/usuarios/:id"
+        element={<PrivateRoute component={ClienteDetalle} />}
+      />
     </Routes>
   )
 }

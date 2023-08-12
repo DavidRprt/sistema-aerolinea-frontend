@@ -1,21 +1,20 @@
 
-import { Route, useLocation, Navigate } from "react-router-dom"
+import { Navigate } from "react-router-dom"
+import Cookies from "js-cookie"
 
 const useIsAuthenticated = () => {
-  const loggedUserJSON = window.localStorage.getItem("loggedUser")
-  return !!loggedUserJSON
+  const token = Cookies.get("token")
+  return !!token
 }
 
-const PrivateRoute = ({ children, path }) => {
+const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = useIsAuthenticated()
-  const location = useLocation()
-
+  
   if (isAuthenticated) {
-    return <Route path={path} element={children} />
+    return <Component {...rest} />
   } else {
-    return <Navigate to="/login" state={{ from: location }} replace />
+    return <Navigate to="/login" replace />
   }
 }
-
 
 export default PrivateRoute

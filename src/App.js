@@ -11,6 +11,8 @@ import rutasService from "./services/rutasService"
 import { cargarAviones } from "./reducers/avionReducer"
 import { cargarModelos } from "./reducers/modeloReducer"
 import { cargarRutas } from "./reducers/rutaReducer"
+import Cookies from "js-cookie"
+import { setUser } from "./reducers/userReducer"
 
 function App() {
   const dispatch = useDispatch()
@@ -34,6 +36,16 @@ function App() {
 
     cargarDatos()
   }, [dispatch])
+
+   useEffect(() => {
+     // Leer la cookie que contiene la información del usuario
+     const userDataInCookie = Cookies.get("userInfo") 
+
+     if (userDataInCookie) {
+       const parsedData = JSON.parse(userDataInCookie)
+       dispatch(setUser(parsedData))
+     }
+   }, [dispatch])
 
   return (
     <div className="App">
