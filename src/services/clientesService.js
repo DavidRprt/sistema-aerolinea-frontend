@@ -2,6 +2,14 @@ import axios from "axios"
 
 const baseURL = "http://localhost:3001/api/clientes"
 
+const getTokenFromCookie = () => {
+  const tokenName = "token"
+  const match = document.cookie.match(
+    "(^|;)\\s*" + tokenName + "\\s*=\\s*([^;]+)"
+  )
+  return match ? match.pop() : ""
+}
+
 const clientesService = {
   getClientes: async () => {
     try {
@@ -13,9 +21,18 @@ const clientesService = {
     }
   },
 
-   updateClienteMillas: async (idcliente, millas) => {
+  updateClienteMillas: async (idcliente, millas) => {
+    const token = getTokenFromCookie()
     try {
-      const response = await axios.patch(`${baseURL}/${idcliente}`, { millas })
+      const response = await axios.patch(
+        `${baseURL}/${idcliente}`,
+        { millas },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       return response.data
     } catch (error) {
       console.error("Error al actualizar las millas del cliente:", error)
@@ -27,7 +44,6 @@ const clientesService = {
     const url = `${baseURL}/pasaporte/${busqueda}`
     try {
       const response = await axios.get(url)
-  
       return response.data
     } catch (error) {
       console.error("Error al obtener los clientes por pasaporte:", error)
@@ -46,17 +62,21 @@ const clientesService = {
     }
   },
 
-
- postCliente: async (cliente) => {
-  try {
-    const response = await axios.post(baseURL, cliente)
-    console.log(response.data)
-    return response.data
-  } catch (error) {
-    console.error("Error al realizar la solicitud POST:", error)
-    throw error
-  }
-},
+  postCliente: async (cliente) => {
+    const token = getTokenFromCookie()
+    try {
+      const response = await axios.post(baseURL, cliente, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      console.log(response.data)
+      return response.data
+    } catch (error) {
+      console.error("Error al realizar la solicitud POST:", error)
+      throw error
+    }
+  },
 
   getClienteById: async (idcliente) => {
     try {
@@ -67,7 +87,6 @@ const clientesService = {
       throw error
     }
   },
-
 }
 
 export default clientesService

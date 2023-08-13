@@ -1,18 +1,30 @@
 import axios from "axios"
 
+const avionesURL = `http://localhost:3001/api/aviones`
+const modelosURL = `http://localhost:3001/api/modelos`
+
+const getTokenFromCookie = () => {
+  const tokenName = "token"
+  const match = document.cookie.match(
+    "(^|;)\\s*" + tokenName + "\\s*=\\s*([^;]+)"
+  )
+  return match ? match.pop() : ""
+}
+
 const getAll = async () => {
-  const url = `http://localhost:3001/api/aviones`
-  const response = await axios.get(url)
+  const response = await axios.get(avionesURL)
   console.log(response)
   return response.data
 }
 
 const postAvion = async (avion) => {
   try {
-    const response = await axios.post(
-      `http://localhost:3001/api/aviones`,
-      avion
-    )
+    const token = getTokenFromCookie()
+    const response = await axios.post(avionesURL, avion, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     return response.data
   } catch (error) {
     console.error("Error al realizar la solicitud POST:", error)
@@ -21,15 +33,18 @@ const postAvion = async (avion) => {
 }
 
 const getModelos = async () => {
-  const url = `http://localhost:3001/api/modelos`
-  const response = await axios.get(url)
+  const response = await axios.get(modelosURL)
   return response.data
 }
 
 const postModelo = async (modelo) => {
   try {
-    const url = `http://localhost:3001/api/modelos`
-    const response = await axios.post(url, modelo)
+    const token = getTokenFromCookie()
+    const response = await axios.post(modelosURL, modelo, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     return response.data
   } catch (error) {
     console.error("Error al realizar la solicitud POST:", error)
@@ -39,8 +54,12 @@ const postModelo = async (modelo) => {
 
 const deleteModelo = async (idModelo) => {
   try {
-    const response = await axios.delete(`http://localhost:3001/api/modelos`, {
+    const token = getTokenFromCookie()
+    const response = await axios.delete(modelosURL, {
       data: { idModelo: idModelo },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
     console.log(response.data)
     return response.data
@@ -52,8 +71,12 @@ const deleteModelo = async (idModelo) => {
 
 const deleteAvion = async (idAvion) => {
   try {
-    const response = await axios.delete(`http://localhost:3001/api/aviones`, {
+    const token = getTokenFromCookie()
+    const response = await axios.delete(avionesURL, {
       data: { idAvion: idAvion },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
     console.log(response.data)
     return response.data
@@ -63,6 +86,12 @@ const deleteAvion = async (idAvion) => {
   }
 }
 
-
 // eslint-disable-next-line
-export default { getAll, getModelos, postModelo, deleteModelo, deleteAvion, postAvion }
+export default {
+  getAll,
+  getModelos,
+  postModelo,
+  deleteModelo,
+  deleteAvion,
+  postAvion,
+}

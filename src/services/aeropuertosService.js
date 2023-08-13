@@ -2,6 +2,14 @@ import axios from "axios"
 
 const url = `http://localhost:3001/api/aeropuertos`
 
+const getTokenFromCookie = () => {
+  const tokenName = "token" 
+  const match = document.cookie.match(
+    "(^|;)\\s*" + tokenName + "\\s*=\\s*([^;]+)"
+  )
+  return match ? match.pop() : ""
+}
+
 const getAll = async () => {
   const response = await axios.get(url)
   console.log(response)
@@ -10,7 +18,12 @@ const getAll = async () => {
 
 const postAeropuerto = async (aeropuerto) => {
   try {
-    const response = await axios.post(url, aeropuerto)
+    const token = getTokenFromCookie()
+    const response = await axios.post(url, aeropuerto, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     console.log(response.data)
     return response.data
   } catch (error) {
@@ -21,8 +34,12 @@ const postAeropuerto = async (aeropuerto) => {
 
 const deleteAeropuerto = async (idAeropuerto) => {
   try {
+    const token = getTokenFromCookie()
     const response = await axios.delete(url, {
       data: { idAeropuerto: idAeropuerto },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
     console.log(response.data)
     return response.data
@@ -31,7 +48,6 @@ const deleteAeropuerto = async (idAeropuerto) => {
     throw error
   }
 }
-
 
 // eslint-disable-next-line
 export default { getAll, postAeropuerto, deleteAeropuerto }
