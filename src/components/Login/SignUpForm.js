@@ -30,6 +30,7 @@ const SignUpForm = () => {
 
   const handleForm = async (e) => {
     e.preventDefault()
+    console.log(nombre, apellido, email, idempleo, password, confirmPassword)
 
     // Reset error al inicio
     setError("")

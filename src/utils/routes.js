@@ -14,6 +14,7 @@ import Checkout from "../components/Pasajes/Checkout"
 import LoginForm from "../components/Login/LoginForm"
 import NotFound from "../components/NotFound"
 import SignUpForm from "../components//Login/SignUpForm"
+import TripulantesDashboard from "../components/Tripulantes/TripulantesDashboard"
 
 const RoutesConfig = () => {
   return (
@@ -55,6 +56,10 @@ const RoutesConfig = () => {
       <Route
         path="/usuarios/:id"
         element={<PrivateRoute component={ClienteDetalle} />}
+      />
+      <Route
+        path="/tripulantes"
+        element={<PrivateRoute component={TripulantesDashboard} />}
       />
     </Routes>
   )

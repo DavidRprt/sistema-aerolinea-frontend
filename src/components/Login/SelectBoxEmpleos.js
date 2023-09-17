@@ -15,7 +15,7 @@ const SelectEmpleo = ({ onSelect }) => {
 
   return (
     <select
-      onChange={(e) => onSelect(e.target.value)}
+      onChange={(e) => onSelect(Number(e.target.value))}
       className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
     >
       <option value="" disabled>

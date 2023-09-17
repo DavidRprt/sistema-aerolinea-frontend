@@ -2,7 +2,11 @@ import { Link } from "react-router-dom"
 import { GiExplodingPlanet } from "react-icons/gi"
 import { MdOutlineAirplaneTicket } from "react-icons/md"
 import { AiOutlineUser } from "react-icons/ai"
-import { MdConnectingAirports } from "react-icons/md"
+import {
+  MdConnectingAirports,
+  MdOutlinePeople,
+  MdOutlinePersonOutline,
+} from "react-icons/md"
 import { CiAirportSign1 } from "react-icons/ci"
 import { BsFillAirplaneFill, BsFillAirplaneEnginesFill } from "react-icons/bs"
 
@@ -32,7 +36,6 @@ const Sidebar = () => {
                   Gestionar cliente
                 </Link>
               </div>
-
             </div>
 
             <div className="my-6 ">
@@ -63,6 +66,20 @@ const Sidebar = () => {
                 <CiAirportSign1 className="text-xl" />
                 <Link className="mx-2 text-lg font-medium" to="/aeropuertos">
                   Aeropuertos
+                </Link>
+              </div>
+
+              <div className="flex items-center px-3 my-3 text-gray-200 transition-colors duration-300 hover:text-gray-400">
+                <MdOutlinePersonOutline className="text-xl" />
+                <Link className="mx-2 text-lg font-medium" to="/tripulantes">
+                  Tripulantes
+                </Link>
+              </div>
+
+              <div className="flex items-center px-3 my-3 text-gray-200 transition-colors duration-300 hover:text-gray-400">
+                <MdOutlinePeople className="text-xl" />
+                <Link className="mx-2 text-lg font-medium" to="/tripulaciones">
+                  Tripulaciones
                 </Link>
               </div>
             </div>
