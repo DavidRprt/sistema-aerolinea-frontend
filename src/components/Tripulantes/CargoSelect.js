@@ -1,19 +1,36 @@
-import React from "react"
-import { useSelector } from "react-redux"
+import React, { useState, useEffect } from "react"
+import tripulacionService from "../../services/tripulacionService"
 
 const CargoSelect = ({ name, value, onChange }) => {
-  const cargos = []
+  const [cargos, setCargos] = useState([])
+
+  useEffect(() => {
+    const fetchCargos = async () => {
+      try {
+        const data = await tripulacionService.getAllCargos()
+        setCargos(data)
+      } catch (error) {
+        console.error("Error al obtener los cargos:", error)
+      }
+    }
+
+    fetchCargos()
+  }, [])
+
+  const handleSelectChange = (e) => {
+    onChange(e) 
+  }
 
   return (
     <select
       name={name}
       value={value}
-      onChange={onChange}
+      onChange={handleSelectChange}
       className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       required
     >
-      <option value="" disabled>
-        Selecciona un cargo
+      <option value="all" defaultValue>
+        Mostrar todos
       </option>
       {cargos.map((cargo) => (
         <option key={cargo.idCargo} value={cargo.idCargo}>

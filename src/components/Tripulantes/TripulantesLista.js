@@ -1,66 +1,77 @@
-import React, { useState } from "react"
-import { RiDeleteBin5Line } from "react-icons/ri"
-import FiltrarTripulantes from "./FiltrarTripulantes"
+import React, { useState, useEffect } from "react"
+import tripulacionService from "../../services/tripulacionService"
+import CargoSelect from "./CargoSelect"
 
-const TripulantesLista = () => {
-  const [filtro, setFiltro] = useState({}) // Para almacenar los filtros seleccionados
-  const tripulantes = [] // Lista vacía de tripulantes
+const TripulanteTable = () => {
+  const [tripulantes, setTripulantes] = useState([])
+  const [filteredTripulantes, setFilteredTripulantes] = useState([])
+  const [selectedCargo, setSelectedCargo] = useState("all")
 
-  // Función para filtrar la lista de tripulantes basado en los filtros seleccionados
-  const tripulantesFiltrados = () => {
-    return tripulantes.filter((tripulante) => {
-      let pasaFiltro = true
+  const updateCargo = (cargo) => {
+    setSelectedCargo(cargo)
 
-      if (filtro.nombre) {
-        pasaFiltro = pasaFiltro && tripulante.nombre.includes(filtro.nombre)
-      }
-      if (filtro.cargo) {
-        pasaFiltro = pasaFiltro && tripulante.cargo === filtro.cargo
-      }
-      if (filtro.antiguedad) {
-        const fechaIngreso = new Date(tripulante.fechaIngreso)
-        const fechaFiltro = new Date(filtro.antiguedad)
-        pasaFiltro = pasaFiltro && fechaIngreso <= fechaFiltro
-      }
-
-      return pasaFiltro
-    })
   }
+
+  useEffect(() => {
+    const fetchTripulantes = async () => {
+      try {
+        const data = await tripulacionService.getAllTripulantes()
+        setTripulantes(data)
+        setFilteredTripulantes(data)
+      } catch (error) {
+        console.error("Error al obtener los tripulantes:", error)
+      }
+    }
+
+    fetchTripulantes()
+  }, [])
+
+useEffect(() => {
+  if (selectedCargo === "all") {
+    setFilteredTripulantes(tripulantes)
+  } else {
+   const filtered = tripulantes.filter(
+     (tripulante) =>
+       tripulante.cargo &&
+       tripulante.cargo.idCargo &&
+       tripulante.cargo.idCargo.toString() === selectedCargo
+   )
+    setFilteredTripulantes(filtered)
+  }
+}, [selectedCargo, tripulantes])
+
 
   return (
     <div className="container mx-auto p-4">
-      <FiltrarTripulantes setFiltro={setFiltro} />
-      <table className="min-w-full bg-white border border-gray-300">
+      <h2>Listado de Tripulantes</h2>
+      <label>Filtrar por cargo: </label>
+      <CargoSelect
+        value={selectedCargo}
+        onChange={(e) => updateCargo(e.target.value)}
+      />
+      <table className="min-w-full bg-white border border-gray-300 mt-4">
         <thead>
           <tr>
-            <th className="py-2 px-4 border-b">ID</th>
             <th className="py-2 px-4 border-b">Nombre</th>
+            <th className="py-2 px-4 border-b">Apellido</th>
             <th className="py-2 px-4 border-b">Cargo</th>
-            <th className="py-2 px-4 border-b">Fecha Ingreso</th>
-            <th className="py-2 px-4 border-b"></th>
+            <th className="py-2 px-4 border-b">Nombre Tripulación</th>
           </tr>
         </thead>
         <tbody>
-          {tripulantesFiltrados().map((tripulante) => (
-            <tr key={tripulante.id}>
-              <td className="py-2 px-4 border-b text-center">
-                {tripulante.id}
-              </td>
+          {filteredTripulantes.map((tripulante) => (
+            <tr key={tripulante.idtripulante}>
               <td className="py-2 px-4 border-b text-center">
                 {tripulante.nombre}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {tripulante.cargo}
+                {tripulante.apellido}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {tripulante.fechaIngreso}
+                {tripulante.cargo.nombre}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                <button
-                  className="text-red-500 hover:text-red-700"
-                >
-                  <RiDeleteBin5Line />
-                </button>
+                {tripulante.tripulacion.nombre}
               </td>
             </tr>
           ))}
@@ -70,4 +81,4 @@ const TripulantesLista = () => {
   )
 }
 
-export default TripulantesLista
+export default TripulanteTable

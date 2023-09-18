@@ -1,105 +1,106 @@
 import React, { useState } from "react"
-import CargoSelect from "./CargoSelect" 
+import CargoSelect from "./CargoSelect"
+import tripulacionService from "../../services/tripulacionService"
 
-const AgregarTripulanteForm = ({ onAdd }) => {
+const AgregarTripulante = () => {
   const [tripulante, setTripulante] = useState({
+    idTripulacion: null,
     nombre: "",
     apellido: "",
-    antiguedad: "",
-    idCargo: "",
+    cargo: "",
   })
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setTripulante((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+    setTripulante({ ...tripulante, [name]: value })
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    onAdd(tripulante)
-    console.log(tripulante) // Imprime el objeto con los datos
-    setTripulante({
-      nombre: "",
-      apellido: "",
-      antiguedad: "",
-      idCargo: "",
-    })
+const handleSubmit = (e) => {
+  e.preventDefault()
+
+  // Verificación de campos llenos
+  if (!tripulante.nombre || !tripulante.apellido || !tripulante.cargo) {
+    window.alert("Por favor, complete todos los campos.")
+    return
   }
+
+  if (tripulante.cargo === "all") {
+    window.alert("No se seleccionó ningún campo.")
+    return
+  }
+
+  tripulacionService.addTripulante(tripulante)
+
+  setTripulante({
+    idTripulacion: null,
+    nombre: "",
+    apellido: "",
+    cargo: "",
+  })
+}
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="container mx-auto p-4">
-        <label
-          className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="nombre"
-        >
-          Nombre
-        </label>
-        <input
-          type="text"
-          name="nombre"
-          value={tripulante.nombre}
-          onChange={handleChange}
-          className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label
-          className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="apellido"
-        >
-          Apellido
-        </label>
-        <input
-          type="text"
-          name="apellido"
-          value={tripulante.apellido}
-          onChange={handleChange}
-          className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label
-          className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="antiguedad"
-        >
-          Fecha de Ingreso
-        </label>
-        <input
-          type="date"
-          name="antiguedad"
-          value={tripulante.antiguedad}
-          onChange={handleChange}
-          className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label
-          className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="idCargo"
-        >
-          Cargo
-        </label>
-        <CargoSelect
-          name="idCargo"
-          value={tripulante.idCargo}
-          onChange={handleChange}
-        />
-      </div>
-      <button
-        type="submit"
-        className="bg-blue-500 text-white rounded px-4 py-2"
+    <div className="container mx-auto p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-4 border border-gray-300 rounded"
       >
-        Agregar Tripulante
-      </button>
-    </form>
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="nombre"
+          >
+            Nombre
+          </label>
+          <input
+            type="text"
+            name="nombre"
+            value={tripulante.nombre}
+            onChange={handleChange}
+            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="apellido"
+          >
+            Apellido
+          </label>
+          <input
+            type="text"
+            name="apellido"
+            value={tripulante.apellido}
+            onChange={handleChange}
+            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="cargo"
+          >
+            Cargo
+          </label>
+          <CargoSelect
+            name="cargo"
+            value={tripulante.cargo}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="flex items-center justify-end">
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Agregar
+          </button>
+        </div>
+      </form>
+    </div>
   )
 }
 
-export default AgregarTripulanteForm
+export default AgregarTripulante
