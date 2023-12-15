@@ -81,35 +81,22 @@ const ReservaCompra = ({ vuelos }) => {
           <p className="text-xl font-medium text-gray-600">
             Selecciona un método de pago:
           </p>
-
           <label className="flex items-center space-x-3">
             <input
               type="radio"
               className="form-radio"
-              value="credito"
-              checked={metodoPago === "credito"}
+              value="TARJETA"
+              checked={metodoPago === "TARJETA"}
               onChange={handlePaymentMethodChange}
             />
-            <span className="text-gray-700">Tarjeta de Crédito</span>
+            <span className="text-gray-700">Tarjeta</span>
           </label>
-
           <label className="flex items-center space-x-3">
             <input
               type="radio"
               className="form-radio"
-              value="debito"
-              checked={metodoPago === "debito"}
-              onChange={handlePaymentMethodChange}
-            />
-            <span className="text-gray-700">Tarjeta de Débito</span>
-          </label>
-
-          <label className="flex items-center space-x-3">
-            <input
-              type="radio"
-              className="form-radio"
-              value="paypal"
-              checked={metodoPago === "paypal"}
+              value="PAYPAL"
+              checked={metodoPago === "PAYPAL"}
               onChange={handlePaymentMethodChange}
             />
             <span className="text-gray-700">PayPal</span>
