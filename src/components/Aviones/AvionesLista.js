@@ -1,16 +1,15 @@
+import React, { useState } from "react"
 import avionesService from "../../services/avionesService"
 import { eliminarAvion } from "../../reducers/avionReducer"
-import { useDispatch } from "react-redux"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { RiDeleteBin5Line } from "react-icons/ri"
 
 const AvionesLista = () => {
-
-    
   const dispatch = useDispatch()
   const aviones = useSelector((state) => state.aviones)
+  const [filtro, setFiltro] = useState("todos")
 
-  const confirmarEliminacion =  async (idAvion) => {
+  const confirmarEliminacion = async (idAvion) => {
     const confirmacion = window.confirm("¿Estás seguro de eliminar esto?")
     if (confirmacion) {
       await avionesService.deleteAvion(idAvion)
@@ -18,41 +17,61 @@ const AvionesLista = () => {
     }
   }
 
+  const handleFiltroChange = (e) => {
+    setFiltro(e.target.value)
+  }
+
+  const avionesFiltrados = aviones.slice().sort((a, b) => {
+    switch (filtro) {
+      case "capacidad":
+        return a.capacidadturista - b.capacidadturista
+      case "año":
+        return a.año - b.año
+      default:
+        return 0
+    }
+  })
 
   return (
-    <div className="container mx-auto p-4">
-      <table className="min-w-full bg-white border border-gray-300">
+    <div className="overflow-x-auto p-4">
+      <div className="mb-4">
+        <div className="flex items-center justify-start gap-2">
+          <h2 className="text-lg">Filtrar por:</h2>
+          <select
+            className="select select-bordered w-full max-w-xs"
+            value={filtro}
+            onChange={handleFiltroChange}
+          >
+            <option value="todos">Todos</option>
+            <option value="capacidad">Capacidad Turista</option>
+            <option value="año">Año</option>
+          </select>
+        </div>
+      </div>
+      <table className="table table-xs">
         <thead>
           <tr>
-            <th className="py-2 px-4 border-b">Nombre</th>
-            <th className="py-2 px-4 border-b">Año</th>
-            <th className="py-2 px-4 border-b">Turista</th>
-            <th className="py-2 px-4 border-b">Premium</th>
-            <th className="py-2 px-4 border-b">Business</th>
-            <th className="py-2 px-4 border-b">Modelo</th>
-            <th className="py-2 px-4 border-b"></th>
+            <th>Nombre</th>
+            <th>Año</th>
+            <th>Turista</th>
+            <th>Premium</th>
+            <th>Business</th>
+            <th>Modelo</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          {aviones.map((avion) => (
+          {avionesFiltrados.map((avion) => (
             <tr key={avion.idavion}>
-              <td className="py-2 px-4 border-b text-center">{avion.nombre}</td>
-              <td className="py-2 px-4 border-b text-center">{avion.año}</td>
-              <td className="py-2 px-4 border-b text-center">
-                {avion.capacidadturista}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                {avion.capacidadpremium}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                {avion.capacidadbusiness}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                {avion.modeloavion.modelo}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
+              <td>{avion.nombre}</td>
+              <td>{avion.año}</td>
+              <td>{avion.capacidadturista}</td>
+              <td>{avion.capacidadpremium}</td>
+              <td>{avion.capacidadbusiness}</td>
+              <td>{avion.modeloavion.modelo}</td>
+              <td>
                 <button
-                  className="text-red-500 hover:text-red-700"
+                  className="btn btn-xs btn-error"
                   onClick={() => confirmarEliminacion(avion.idavion)}
                 >
                   <RiDeleteBin5Line />

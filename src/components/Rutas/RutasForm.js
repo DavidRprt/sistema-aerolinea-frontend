@@ -82,7 +82,7 @@ const AgregarRuta = () => {
         className="bg-white p-4 border border-gray-300 rounded"
       >
         <div className="grid grid-cols-2 gap-4">
-          <div className="mb-4">
+          <div className="mb-4 form-control">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="idorigen"
