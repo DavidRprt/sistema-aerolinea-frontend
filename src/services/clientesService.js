@@ -51,6 +51,18 @@ const clientesService = {
     }
   },
 
+  getTopClientes: async () => {
+    const url = `http://localhost:3001/api/topclientes`
+    try {
+      const response = await axios.get(url)
+      return response.data
+    } catch (error) {
+      console.error("Error al obtener los clientes con mas millas:", error)
+      return []
+    }
+
+  },
+
   getClientesEmail: async (busqueda) => {
     const url = `${baseURL}/email/${busqueda}`
     try {
