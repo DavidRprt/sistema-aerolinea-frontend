@@ -10,7 +10,98 @@ import {
 import { CiAirportSign1 } from "react-icons/ci"
 import { BsFillAirplaneFill, BsFillAirplaneEnginesFill } from "react-icons/bs"
 
+// MenuComponent: Clase base para elementos de menú
+class MenuComponent {
+  constructor(name) {
+    this.name = name;
+  }
+
+  render() {
+    // Método de renderizado base, será sobreescrito
+  }
+}
+
+// MenuItem: Representa un enlace individual del menú
+class MenuItem extends MenuComponent {
+  constructor(name, icon, to) {
+    super(name);
+    this.icon = icon;
+    this.to = to;
+  }
+
+  render() {
+    return (
+      <div className="flex items-center px-3 my-3 text-gray-200 transition-colors duration-300 hover:text-gray-400">
+        {this.icon}
+        <Link className="mx-2 text-lg font-medium" to={this.to}>
+          {this.name}
+        </Link>
+      </div>
+    );
+  }
+}
+
+// MenuGroup: Representa un grupo de elementos de menú
+class MenuGroup extends MenuComponent {
+  constructor(name, items = []) {
+    super(name);
+    this.items = items;
+  }
+
+  render() {
+    return (
+      <div className="my-6">
+        <label className="px-3 text-xl text-gray-400">{this.name}</label>
+        {this.items.map(item => item.render())}
+      </div>
+    );
+  }
+}
+
+// Sidebar: Componente de barra lateral con elementos de menú
 const Sidebar = () => {
+  // Definición de elementos de menú y grupos
+  const venderItems = [
+    new MenuItem('Emitir pasajes', <MdOutlineAirplaneTicket className="text-xl" />, '/pasajes'),
+    new MenuItem('Gestionar cliente', <AiOutlineUser className="text-xl" />, '/usuarios'),
+  ];
+ 
+  const administrarItems = [
+    new MenuItem(
+      "Rutas",
+      <MdConnectingAirports className="text-xl" />,
+      "/rutas"
+    ),
+    new MenuItem(
+      "Aviones",
+      <BsFillAirplaneFill className="text-xl" />,
+      "/aviones"
+    ),
+    new MenuItem(
+      "Modelos",
+      <BsFillAirplaneEnginesFill className="text-xl" />,
+      "/modelos"
+    ),
+    new MenuItem(
+      "Aeropuertos",
+      <CiAirportSign1 className="text-xl" />,
+      "/aeropuertos"
+    ),
+    new MenuItem(
+      "Tripulantes",
+      <MdOutlinePersonOutline className="text-xl" />,
+      "/tripulantes"
+    ),
+    new MenuItem(
+      "Tripulaciones",
+      <MdOutlinePeople className="text-xl" />,
+      "/tripulaciones"
+    ),
+  ]
+
+  const venderGroup = new MenuGroup('Vender', venderItems);
+  const administrarGroup = new MenuGroup('Administrar', administrarItems);
+
   return (
     <div className="flex flex-col w-64 px-5 overflow-y-auto bg-gray-900 border-r border-gray-700 min-w-min">
       <div className="h-screen sticky top-0">
@@ -18,77 +109,14 @@ const Sidebar = () => {
           <Link className="text-white text-4xl my-3 flex gap-3" to="/">
             <GiExplodingPlanet /> <h3>AirFLY</h3>
           </Link>
-
-          <nav className="-mx-3 space-y-6 ">
-            <div className="my-6 ">
-              <label className="px-3 text-xl text-gray-400">Vender</label>
-
-              <div className="flex items-center px-3 my-3 text-gray-200 transition-colors duration-300 hover:text-gray-400">
-                <MdOutlineAirplaneTicket className="text-xl" />
-                <Link className="mx-2 text-lg font-medium" to="/pasajes">
-                  Emitir pasajes
-                </Link>
-              </div>
-
-              <div className="flex items-center px-3 my-3 text-gray-200 transition-colors duration-300 hover:text-gray-400">
-                <AiOutlineUser className="text-xl" />
-                <Link className="mx-2 text-lg font-medium" to="/usuarios">
-                  Gestionar cliente
-                </Link>
-              </div>
-            </div>
-
-            <div className="my-6 ">
-              <label className="px-3 text-xl text-gray-400">Administrar</label>
-
-              <div className="flex items-center px-3 my-3 text-gray-200 transition-colors duration-300 hover:text-gray-400">
-                <MdConnectingAirports className="text-xl" />
-                <Link className="mx-2 text-lg font-medium" to="/rutas">
-                  Rutas
-                </Link>
-              </div>
-
-              <div className="flex items-center px-3 my-3 text-gray-200 transition-colors duration-300 hover:text-gray-400">
-                <BsFillAirplaneFill className="text-xl" />
-                <Link className="mx-2 text-lg font-medium" to="/aviones">
-                  Aviones
-                </Link>
-              </div>
-
-              <div className="flex items-center px-3 my-3 text-gray-200 transition-colors duration-300 hover:text-gray-400">
-                <BsFillAirplaneEnginesFill className="text-xl" />
-                <Link className="mx-2 text-lg font-medium" to="/modelos">
-                  Modelos
-                </Link>
-              </div>
-
-              <div className="flex items-center px-3 my-3 text-gray-200 transition-colors duration-300 hover:text-gray-400">
-                <CiAirportSign1 className="text-xl" />
-                <Link className="mx-2 text-lg font-medium" to="/aeropuertos">
-                  Aeropuertos
-                </Link>
-              </div>
-
-              <div className="flex items-center px-3 my-3 text-gray-200 transition-colors duration-300 hover:text-gray-400">
-                <MdOutlinePersonOutline className="text-xl" />
-                <Link className="mx-2 text-lg font-medium" to="/tripulantes">
-                  Tripulantes
-                </Link>
-              </div>
-
-              <div className="flex items-center px-3 my-3 text-gray-200 transition-colors duration-300 hover:text-gray-400">
-                <MdOutlinePeople className="text-xl" />
-                <Link className="mx-2 text-lg font-medium" to="/tripulaciones">
-                  Tripulaciones
-                </Link>
-              </div>
-            </div>
+          <nav className="-mx-3 space-y-6">
+            {venderGroup.render()}
+            {administrarGroup.render()}
           </nav>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Sidebar
-
+export default Sidebar;
