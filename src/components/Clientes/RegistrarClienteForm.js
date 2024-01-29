@@ -1,5 +1,29 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import clientesService from "../../services/clientesService"
+
+class Memento {
+  constructor(state) {
+    this.state = state
+  }
+
+  getState() {
+    return this.state
+  }
+}
+
+class Caretaker {
+  constructor() {
+    this.mementos = []
+  }
+
+  addMemento(memento) {
+    this.mementos.push(memento)
+  }
+
+  getMemento(index) {
+    return this.mementos[index]
+  }
+}
 
 const AgregarCliente = () => {
   const [cliente, setCliente] = useState({
@@ -8,38 +32,51 @@ const AgregarCliente = () => {
     pasaporte: "",
     email: "",
     telefono: "",
-    millas: 0
+    millas: 0,
   })
 
-   const handleChange = (e) => {
-     setCliente({ ...cliente, [e.target.name]: e.target.value })
-   }
+  const caretaker = useRef(new Caretaker()).current
 
-   const handleSubmit = async (e) => {
-     e.preventDefault()
+  const handleChange = (e) => {
+    // Guardar el estado actual antes de actualizar
+    caretaker.addMemento(new Memento(cliente))
+    setCliente({ ...cliente, [e.target.name]: e.target.value })
+  }
 
-     // Verificar si el campo de telefono está vacío y establecer el valor en null si es así
-     const telefono = cliente.telefono.trim() === "" ? null : cliente.telefono
+  const handleUndo = () => {
+    // Restaurar al último estado guardado
+    const memento = caretaker.getMemento(caretaker.mementos.length - 1)
+    if (memento) {
+      setCliente(memento.getState())
+      caretaker.mementos.pop()
+    }
+  }
 
-     // Crear un nuevo objeto de cliente con el valor actualizado del telefono
-     const nuevoCliente = {
-       ...cliente,
-       telefono,
-     }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
 
-     // Enviar el cliente al servicio
-     clientesService.postCliente(nuevoCliente)
+    // Verificar si el campo de telefono está vacío y establecer el valor en null si es así
+    const telefono = cliente.telefono.trim() === "" ? null : cliente.telefono
 
-     // Limpiar el formulario borrando los datos
-     setCliente({
-       nombre: "",
-       apellido: "",
-       pasaporte: "",
-       email: "",
-       telefono: "",
-       millas: 0,
-     })
-   }
+    // Crear un nuevo objeto de cliente con el valor actualizado del telefono
+    const nuevoCliente = {
+      ...cliente,
+      telefono,
+    }
+
+    // Enviar el cliente al servicio
+    clientesService.postCliente(nuevoCliente)
+
+    // Limpiar el formulario borrando los datos
+    setCliente({
+      nombre: "",
+      apellido: "",
+      pasaporte: "",
+      email: "",
+      telefono: "",
+      millas: 0,
+    })
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -128,7 +165,14 @@ const AgregarCliente = () => {
             />
           </div>
         </div>
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-between">
+          <button
+            type="button" // Tipo 'button' para no enviar el formulario
+            onClick={handleUndo} // Función para deshacer cambios
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Deshacer Cambio
+          </button>
           <button
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
