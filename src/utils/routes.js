@@ -11,7 +11,9 @@ import ModelosDashboard from "../components/Modelos/ModelosDashboard"
 import RutasDashboard from "../components/Rutas/RutasDashboard"
 import ClienteDetalle from "../components/Clientes/ClienteDetalle"
 import Checkout from "../components/Pasajes/Checkout"
+import Forgot from "../components/Login/Forgot"
 import LoginForm from "../components/Login/LoginForm"
+import ResetPassword from "../components/Login/ResetPassword"
 import NotFound from "../components/NotFound"
 import SignUpForm from "../components//Login/SignUpForm"
 import TripulantesDashboard from "../components/Tripulantes/TripulantesDashboard"
@@ -22,6 +24,8 @@ const RoutesConfig = () => {
       <Route path="/" element={<HomeDashboard />} />
       <Route path="/login" element={<LoginForm />} />
       <Route path="/signup" element={<SignUpForm />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <Route path="/forgot" element={<Forgot />} />
       <Route path="*" element={<NotFound />} />
 
       <Route
