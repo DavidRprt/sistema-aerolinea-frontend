@@ -15,6 +15,7 @@ import Forgot from "../components/Login/Forgot"
 import LoginForm from "../components/Login/LoginForm"
 import ResetPassword from "../components/Login/ResetPassword"
 import NotFound from "../components/NotFound"
+import AdminPanel from "../components/Administrar/AdminPanel"
 import SignUpForm from "../components//Login/SignUpForm"
 import TripulantesDashboard from "../components/Tripulantes/TripulantesDashboard"
 
@@ -32,6 +33,7 @@ const RoutesConfig = () => {
         path="/rutas"
         element={<PrivateRoute component={RutasDashboard} />}
       />
+      <Route path="/admin" element={<PrivateRoute component={AdminPanel} />} />
       <Route
         path="/pasajes"
         element={<PrivateRoute component={PasajesDashboard} />}

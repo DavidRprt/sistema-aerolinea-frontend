@@ -17,6 +17,8 @@ const Navbar = () => {
     dispatch(clearUser())
   }
 
+  const isAdmin = user && user.empleo === "Administrador"
+
   return (
     <nav className="flex items-center justify-end gap-3 flex-wrap bg-gray-600 px-8 py-2 mb-5">
       <div className="text-sm flex items-center gap-3 justify-end">
@@ -29,6 +31,16 @@ const Navbar = () => {
             <span className="text-white text-lg font-semibold mr-4">
               {user.nombre} {user.apellido}
             </span>
+
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="bg-white hover:bg-yellow-500 text-yellow-700 font-semibold hover:text-white py-2 px-4 border border-yellow-500 hover:border-transparent rounded"
+              >
+                Administrar
+              </Link>
+            )}
+
             <button
               onClick={handleLogout}
               className="bg-white hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded"

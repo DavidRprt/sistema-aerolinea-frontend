@@ -9,11 +9,12 @@ import {
 } from "react-icons/md"
 import { CiAirportSign1 } from "react-icons/ci"
 import { BsFillAirplaneFill, BsFillAirplaneEnginesFill } from "react-icons/bs"
+import { useSelector } from "react-redux"
 
 // MenuComponent: Clase base para elementos de menú
 class MenuComponent {
   constructor(name) {
-    this.name = name;
+    this.name = name
   }
 
   render() {
@@ -24,9 +25,9 @@ class MenuComponent {
 // MenuItem: Representa un enlace individual del menú
 class MenuItem extends MenuComponent {
   constructor(name, icon, to) {
-    super(name);
-    this.icon = icon;
-    this.to = to;
+    super(name)
+    this.icon = icon
+    this.to = to
   }
 
   render() {
@@ -37,35 +38,46 @@ class MenuItem extends MenuComponent {
           {this.name}
         </Link>
       </div>
-    );
+    )
   }
 }
 
 // MenuGroup: Representa un grupo de elementos de menú
 class MenuGroup extends MenuComponent {
   constructor(name, items = []) {
-    super(name);
-    this.items = items;
+    super(name)
+    this.items = items
   }
 
   render() {
     return (
       <div className="my-6">
         <label className="px-3 text-xl text-gray-400">{this.name}</label>
-        {this.items.map(item => item.render())}
+        {this.items.map((item, index) => (
+          <div key={item.name + index}>{item.render()}</div>
+        ))}
       </div>
-    );
+    )
   }
 }
 
 // Sidebar: Componente de barra lateral con elementos de menú
 const Sidebar = () => {
-  // Definición de elementos de menú y grupos
+  const user = useSelector((state) => state.user)
+
   const venderItems = [
-    new MenuItem('Emitir pasajes', <MdOutlineAirplaneTicket className="text-xl" />, '/pasajes'),
-    new MenuItem('Gestionar cliente', <AiOutlineUser className="text-xl" />, '/usuarios'),
-  ];
- 
+    new MenuItem(
+      "Emitir pasajes",
+      <MdOutlineAirplaneTicket className="text-xl" />,
+      "/pasajes"
+    ),
+    new MenuItem(
+      "Gestionar cliente",
+      <AiOutlineUser className="text-xl" />,
+      "/usuarios"
+    ),
+  ]
+
   const administrarItems = [
     new MenuItem(
       "Rutas",
@@ -99,8 +111,8 @@ const Sidebar = () => {
     ),
   ]
 
-  const venderGroup = new MenuGroup('Vender', venderItems);
-  const administrarGroup = new MenuGroup('Administrar', administrarItems);
+  const venderGroup = new MenuGroup("Vender", venderItems)
+  const administrarGroup = new MenuGroup("Administrar", administrarItems)
 
   return (
     <div className="flex flex-col w-64 px-5 overflow-y-auto bg-gray-900 border-r border-gray-700 min-w-min">
@@ -110,13 +122,13 @@ const Sidebar = () => {
             <GiExplodingPlanet /> <h3>AirFLY</h3>
           </Link>
           <nav className="-mx-3 space-y-6">
-            {venderGroup.render()}
-            {administrarGroup.render()}
+            {user && user.idempleo === 2 && venderGroup.render()}
+            {user && user.idempleo === 1 && administrarGroup.render()}
           </nav>
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Sidebar;
+export default Sidebar
