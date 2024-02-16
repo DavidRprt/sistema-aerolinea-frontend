@@ -42,29 +42,27 @@ const Checkout = ({ oneway, vueloIda, vueloVuelta }) => {
   }
 
   const handlePurchase = async () => {
+    let vuelosTemp = []
 
-  let vuelosTemp = []
+    clientesValidados.forEach((cliente) => {
+      let vueloIdaCopia = {
+        ...vueloIda,
+        cliente: { id: cliente.idcliente, millas: cliente.millas },
+      }
+      vuelosTemp.push(vueloIdaCopia)
 
-  // Asignar cada vuelo a un cliente
-  clientesValidados.forEach((cliente) => {
-    // Para el vuelo de ida
-    let vueloIdaCopia = { ...vueloIda }
-    vueloIdaCopia.idcliente = cliente.idcliente
-    vuelosTemp.push(vueloIdaCopia)
+      if (!oneway) {
+        let vueloVueltaCopia = {
+          ...vueloVuelta,
+          cliente: { id: cliente.idcliente, millas: cliente.millas },
+        }
+        vuelosTemp.push(vueloVueltaCopia)
+      }
+    })
 
-    // Para el vuelo de vuelta si no es un viaje de solo ida
-    if (!oneway) {
-      let vueloVueltaCopia = { ...vueloVuelta }
-      vueloVueltaCopia.idcliente = cliente.idcliente
-      vuelosTemp.push(vueloVueltaCopia)
-    }
-  })
-
-
-  setVuelos(vuelosTemp) // actualizar el estado de vuelos con el array vuelosTemp
-
-  setIsProcessingPurchase(true) // cambiar el estado a verdadero para mostrar el componente de finalización de compra
-}
+    setVuelos(vuelosTemp)
+    setIsProcessingPurchase(true)
+  }
 
   const handleNumPassengersChange = (e) => {
     const newNum = parseInt(e.target.value)

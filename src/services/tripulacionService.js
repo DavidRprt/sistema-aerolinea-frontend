@@ -32,7 +32,7 @@ const getAllTripulantes = async () => {
 
 const getAllTripulaciones = async () => {
   try {
-    const response = await axios.get(`${baseURL}/tripulaciones`)
+    const response = await axios.get(`${baseURL}/tripulacion`)
     return response.data
   } catch (error) {
     console.error("Error al obtener todas las tripulaciones:", error)
@@ -55,5 +55,30 @@ const addTripulante = async (tripulante) => {
   }
 }
 
+const updateTripulante = async (idtripulante, tripulante) => {
+  try {
+    const token = getTokenFromCookie()
+    const response = await axios.put(
+      `${baseURL}/tripulantes/${idtripulante}`,
+      tripulante,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    return response.data
+  } catch (error) {
+    console.error("Error al actualizar el tripulante:", error)
+    throw error
+  }
+}
+
 // eslint-disable-next-line
-export default { getAllCargos, getAllTripulantes, getAllTripulaciones, addTripulante }
+export default {
+  getAllCargos,
+  getAllTripulantes,
+  getAllTripulaciones,
+  addTripulante,
+  updateTripulante,
+}
