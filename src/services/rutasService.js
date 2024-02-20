@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const url = `http://localhost:3001/api/rutas`
+const url = `${process.env.REACT_APP_API_URL}/rutas`
 
 const getTokenFromCookie = () => {
   const tokenName = "token"

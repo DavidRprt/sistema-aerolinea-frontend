@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const url = `http://localhost:3001/api/reservas`
+const url = `${process.env.REACT_APP_API_URL}/reservas`
 
 const getTokenFromCookie = () => {
   const tokenName = "token"

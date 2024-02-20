@@ -13,6 +13,11 @@ const AdminPanel = () => {
       try {
         const dataEmpleados = await authService.getAllEmployees()
         setEmpleados(dataEmpleados)
+        const empleadosInicial = dataEmpleados.reduce((acc, empleado) => {
+          acc[empleado.idempleado] = empleado.idempleo
+          return acc
+        }, {})
+        setEmpleadosModificados(empleadosInicial)
       } catch (error) {
         console.error("Error al cargar los empleados:", error)
       }
@@ -91,7 +96,7 @@ const AdminPanel = () => {
             <div className="flex justify-center items-center gap-1">
               <strong>Empleo:</strong>
               <select
-                defaultValue={empleado.idempleo}
+                value={empleadosModificados[empleado.idempleado]}
                 onChange={(e) =>
                   handleEmpleoChange(empleado.idempleado, e.target.value)
                 }

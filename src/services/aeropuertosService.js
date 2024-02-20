@@ -1,9 +1,9 @@
 import axios from "axios"
 
-const url = `http://localhost:3001/api/aeropuertos`
+const url = `${process.env.REACT_APP_API_URL}/aeropuertos`
 
 const getTokenFromCookie = () => {
-  const tokenName = "token" 
+  const tokenName = "token"
   const match = document.cookie.match(
     "(^|;)\\s*" + tokenName + "\\s*=\\s*([^;]+)"
   )

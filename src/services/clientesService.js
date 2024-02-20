@@ -1,6 +1,7 @@
 import axios from "axios"
 
-const baseURL = "http://localhost:3001/api/clientes"
+
+const baseURL = `${process.env.REACT_APP_API_URL}/clientes`
 
 const getTokenFromCookie = () => {
   const tokenName = "token"
