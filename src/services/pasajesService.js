@@ -10,7 +10,6 @@ const getTokenFromCookie = () => {
   return match ? match.pop() : ""
 }
 
-
 const getPasajesByAirport = async (idorigen, iddestino) => {
   try {
     const response = await axios.get(`${url}/:idorigen/:iddestino`)
@@ -35,5 +34,20 @@ const crearPasaje = async (pasaje) => {
   }
 }
 
+const getFrecuenciaPorClase = async () => {
+  try {
+    const token = getTokenFromCookie()
+    const response = await axios.get(`${url}/frecuenciaPorClase`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response.data
+  } catch (error) {
+    console.error("Error al obtener la frecuencia de pasajes por clase:", error)
+    throw new Error("Error al obtener la frecuencia de pasajes por clase")
+  }
+}
+
 // eslint-disable-next-line
-export default { getPasajesByAirport, crearPasaje }
+export default { getPasajesByAirport, crearPasaje, getFrecuenciaPorClase }

@@ -10,7 +10,6 @@ import { eliminarRuta } from "../../reducers/rutaReducer"
 const RutasLista = () => {
   const dispatch = useDispatch()
   const rutas = useSelector((state) => state.rutas)
-console.log(rutas)
 
   const confirmarEliminacion = async (idRuta) => {
     const confirmacion = window.confirm("¿Estás seguro de eliminar esto?")

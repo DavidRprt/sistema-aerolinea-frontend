@@ -8,7 +8,6 @@ import { cargarSingleCliente } from "../../reducers/clienteReducer"
 const ClienteDetalle = () => {
   const { id } = useParams()
   const clienteCargado = useSelector((state) => state.clientes.clienteCargado)
-  console.log(clienteCargado)
 
   const getStatus = (millas) => {
     if (millas === 0) {

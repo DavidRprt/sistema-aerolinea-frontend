@@ -48,7 +48,6 @@ const LoginForm = () => {
 
     try {
       const response = await empleadoService.login(loginData)
-      console.log("Respuesta del servidor:", response)
       setError("") // Si no hay errores, reseteamos cualquier error anterior
       Cookies.set("token", response.token, { expires: 1 / 24 })
       // Guardar la información del usuario en otra cookie

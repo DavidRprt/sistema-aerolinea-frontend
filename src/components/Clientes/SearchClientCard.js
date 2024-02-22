@@ -31,13 +31,11 @@ const BuscarCliente = () => {
         const response = await clientesService.getClientesPasaporte(
           busqueda.busqueda
         )
-        console.log(response)
         dispatch(cargarClientes(response)) 
       } else if (searchType.type === "email") {
         const response = await clientesService.getClientesEmail(
           busqueda.busqueda
         )
-        console.log(response)
         dispatch(cargarClientes(response)) 
       }
     } catch (error) {

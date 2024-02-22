@@ -12,7 +12,6 @@ const getTokenFromCookie = () => {
 
 const getAll = async () => {
   const response = await axios.get(url)
-  console.log(response)
   return response.data
 }
 

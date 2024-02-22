@@ -5,7 +5,6 @@ const rutaSlice = createSlice({
   initialState: [],
   reducers: {
     cargarRutas: (state, action) => {
-      console.log(action.payload)
       return action.payload
     },
     agregarRuta: (state, action) => {

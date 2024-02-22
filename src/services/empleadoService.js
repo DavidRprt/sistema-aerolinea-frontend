@@ -5,7 +5,6 @@ const url = `${process.env.REACT_APP_API_URL}`
 const signUp = async (empleadoData) => {
   try {
     const response = await axios.post(`${url}/signup`, empleadoData)
-    console.log(response.data)
     return response.data
   } catch (error) {
     console.error("Error al realizar la solicitud POST para registrar:", error)
@@ -16,7 +15,6 @@ const signUp = async (empleadoData) => {
 const getAllEmpleos = async () => {
   try {
     const response = await axios.get(`${url}/empleos`)
-    console.log(response.data)
     return response.data
   } catch (error) {
     console.error(
@@ -30,7 +28,6 @@ const getAllEmpleos = async () => {
 const login = async (loginData) => {
   try {
     const response = await axios.post(`${url}/login`, loginData)
-    console.log(response.data)
     return response.data
   } catch (error) {
     console.error(

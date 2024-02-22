@@ -7,7 +7,7 @@ const ResetPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [message, setMessage] = useState("")
   const [error, setError] = useState("")
-  const { token } = useParams() 
+  const { token } = useParams()
 
   const handleForm = async (e) => {
     e.preventDefault()

@@ -24,8 +24,6 @@ const Checkout = ({ oneway, vueloIda, vueloVuelta }) => {
         passengerPassports[i]
       )
 
-      console.log(cliente)
-
       if (cliente.length === 0) {
         alert(
           `El pasajero con pasaporte ${passengerPassports[i]} no está registrado en nuestra base de datos`

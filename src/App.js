@@ -28,7 +28,6 @@ function App() {
         dispatch(cargarAviones(aviones))
         dispatch(cargarModelos(modelos))
         dispatch(cargarRutas(rutas))
-        console.log("Datos cargados exitosamente")
       } catch (error) {
         console.error("Error al cargar los datos:", error)
       }

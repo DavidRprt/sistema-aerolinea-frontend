@@ -13,7 +13,6 @@ const getTokenFromCookie = () => {
 const getAll = async () => {
   try {
     const response = await axios.get(url)
-    console.log(response)
     return response.data
   } catch (error) {
     console.error("Error al obtener todas las rutas:", error)
@@ -55,7 +54,6 @@ const deleteRuta = async (idRuta) => {
         Authorization: `Bearer ${token}`,
       },
     })
-    console.log(response.data)
     return response.data
   } catch (error) {
     console.error("Error al realizar la solicitud DELETE:", error)

@@ -18,7 +18,6 @@ const Navbar = () => {
   }
 
   const isAdmin = user && user.empleo === "administrador"
-  console.log(user)
 
   return (
     <nav className="flex items-center justify-end gap-3 flex-wrap bg-gray-600 px-8 py-2 mb-5">

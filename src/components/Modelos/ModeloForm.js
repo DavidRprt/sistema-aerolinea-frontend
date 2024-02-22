@@ -21,7 +21,6 @@ const ModeloForm = () => {
     try {
       const newModelo = await avionesService.postModelo(modelo)
       dispatch(agregarModelos(newModelo))
-      console.log("Modelo agregado exitosamente")
 
       setModelo({
         modelo: "",

@@ -28,7 +28,6 @@ const AgregarAeropuerto = () => {
     try {
       await aeropuertosService.postAeropuerto(aeropuerto)
       dispatch(agregarAeropuerto(aeropuerto))
-      console.log("Aeropuerto creado exitosamente")
 
       setAeropuerto({
         idaeropuerto: "",

@@ -16,21 +16,15 @@ const SignUpForm = () => {
   const navigate = useNavigate()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-   useEffect(() => {
-     const userInfo = Cookies.get("userInfo")
-     if (userInfo) {
-       setIsLoggedIn(true)
-     }
-   }, [])
-
-  const isValidEmail = (email) => {
-    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
-    return regex.test(email)
-  }
+  useEffect(() => {
+    const userInfo = Cookies.get("userInfo")
+    if (userInfo) {
+      setIsLoggedIn(true)
+    }
+  }, [])
 
   const handleForm = async (e) => {
     e.preventDefault()
-    console.log(nombre, apellido, email, idempleo, password, confirmPassword)
 
     // Reset error al inicio
     setError("")
@@ -45,12 +39,6 @@ const SignUpForm = () => {
       !confirmPassword
     ) {
       setError("Por favor completa todos los campos.")
-      return
-    }
-
-    // Validación: Formato de email
-    if (!isValidEmail(email)) {
-      setError("Por favor ingresa un email válido.")
       return
     }
 
@@ -81,7 +69,11 @@ const SignUpForm = () => {
       // Redireccionar al formulario de login después de un registro exitoso
       navigate("/login")
     } catch (err) {
-      setError("Error al registrar. Por favor intenta de nuevo.")
+      if (err.response && err.response.data && err.response.data.error) {
+        setError(err.response.data.error)
+      } else {
+        setError("Error al registrar. Por favor intenta de nuevo.")
+      }
     }
   }
 
@@ -127,7 +119,7 @@ const SignUpForm = () => {
                 </div>
                 <div>
                   <input
-                    type="email"
+                    type="text"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full border border-gray-300 p-3 rounded mt-1 focus:outline-none focus:border-indigo-500"
@@ -182,7 +174,6 @@ const SignUpForm = () => {
       </div>
     </div>
   )
-
 }
 
 export default SignUpForm

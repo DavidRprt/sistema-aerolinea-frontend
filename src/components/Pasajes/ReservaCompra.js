@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import reservaService from "../../services/reservaService"
 import pasajesService from "../../services/pasajesService"
-import clientesService from "../../services/clientesService"
 import { useNavigate } from "react-router-dom"
 
 const ReservaCompra = ({ vuelos }) => {
@@ -11,7 +10,6 @@ const ReservaCompra = ({ vuelos }) => {
   const navigate = useNavigate()
   const tasaConversion = 2
   const precioPorCliente = {}
-  console.log(vuelos)
 
   vuelos.forEach((vuelo) => {
     if (precioPorCliente[vuelo.cliente.id]) {

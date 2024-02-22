@@ -37,7 +37,6 @@ const TripulanteDetalles = () => {
       try {
         const tripulantesData = await tripulacionService.getAllTripulantes()
         const tripulacionesData = await tripulacionService.getAllTripulaciones()
-        console.log(tripulacionesData)
         setTripulaciones(tripulacionesData)
         const tripulanteData = tripulantesData.find(
           (t) => t.idtripulante.toString() === idtripulante

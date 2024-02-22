@@ -46,8 +46,6 @@ const AvionForm = () => {
        } 
        
       dispatch(agregarAviones(avionConModelo))
-      console.log("Avion creado exitosamente")
-
       setAvion({
       nombre: "",
       año: "",

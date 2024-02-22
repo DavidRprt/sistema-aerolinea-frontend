@@ -62,7 +62,6 @@ const AdminPanel = () => {
           empleado.idempleo
         )
       }
-      console.log("Todos los empleos han sido actualizados")
       navigate("/")
     } catch (error) {
       console.error("Error al actualizar empleos:", error)
