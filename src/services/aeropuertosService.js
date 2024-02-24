@@ -48,5 +48,21 @@ const deleteAeropuerto = async (idAeropuerto) => {
   }
 }
 
+const getAeropuertosConMasRutas = async () => {
+  try {
+    const response = await axios.get(`${url}/mas-rutas`)
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error("Error al obtener los aeropuertos con más rutas:", error)
+    throw error
+  }
+}
+
 // eslint-disable-next-line
-export default { getAll, postAeropuerto, deleteAeropuerto }
+export default {
+  getAll,
+  postAeropuerto,
+  deleteAeropuerto,
+  getAeropuertosConMasRutas,
+}

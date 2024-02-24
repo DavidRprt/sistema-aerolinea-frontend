@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import SelectEmpleo from "./SelectBoxEmpleos"
 import empleadoService from "../../services/empleadoService"
 import { useNavigate } from "react-router-dom"
 import Cookies from "js-cookie"
@@ -9,7 +8,7 @@ const SignUpForm = () => {
   const [nombre, setNombre] = useState("")
   const [apellido, setApellido] = useState("")
   const [email, setEmail] = useState("")
-  const [idempleo, setEmpleo] = useState("")
+  const idempleo = 4
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
@@ -77,10 +76,6 @@ const SignUpForm = () => {
     }
   }
 
-  const handleEmpleoSelect = (empleoId) => {
-    setEmpleo(empleoId)
-  }
-
   return (
     <div className="flex min-h-screen items-start justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md bg-white p-8 rounded shadow-md space-y-8">
@@ -125,9 +120,6 @@ const SignUpForm = () => {
                     className="w-full border border-gray-300 p-3 rounded mt-1 focus:outline-none focus:border-indigo-500"
                     placeholder="Email"
                   />
-                </div>
-                <div>
-                  <SelectEmpleo onSelect={handleEmpleoSelect} />
                 </div>
                 <div>
                   <input

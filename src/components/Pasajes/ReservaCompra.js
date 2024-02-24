@@ -60,11 +60,11 @@ const ReservaCompra = ({ vuelos }) => {
         fechaemision: fechaemision,
         preciototal: precioTotal,
       })
-      const idReserva = reservaResponse.id // Asegúrate de usar la propiedad correcta para obtener el ID de la reserva.
+      const idReserva = reservaResponse.id
 
       const vuelosConIdReserva = vuelos.map((vuelo) => ({
         ...vuelo,
-        idreserva: idReserva, // Asume que idReserva es el ID devuelto por la API
+        idreserva: idReserva,
       }))
 
       const pasajesPromises = vuelosConIdReserva.map((vuelo) => {
@@ -119,8 +119,8 @@ const ReservaCompra = ({ vuelos }) => {
             <input
               type="radio"
               className="form-radio"
-              value="TARJETA"
-              checked={metodoPago === "TARJETA"}
+              value="credito"
+              checked={metodoPago === "credito"}
               onChange={handlePaymentMethodChange}
             />
             <span className="text-gray-700">Tarjeta</span>
@@ -129,8 +129,8 @@ const ReservaCompra = ({ vuelos }) => {
             <input
               type="radio"
               className="form-radio"
-              value="PAYPAL"
-              checked={metodoPago === "PAYPAL"}
+              value="paypal"
+              checked={metodoPago === "paypal"}
               onChange={handlePaymentMethodChange}
             />
             <span className="text-gray-700">PayPal</span>
