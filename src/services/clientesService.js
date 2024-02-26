@@ -1,6 +1,5 @@
 import axios from "axios"
 
-
 const baseURL = `${process.env.REACT_APP_API_URL}/clientes`
 
 const getTokenFromCookie = () => {
@@ -23,11 +22,12 @@ const clientesService = {
   },
 
   updateClienteMillas: async (idcliente, millas) => {
+    const millasSumar = idcliente.millas
     const token = getTokenFromCookie()
     try {
       const response = await axios.patch(
-        `${baseURL}/${idcliente}`,
-        { millas },
+        `${baseURL}/${idcliente.idcliente}`,
+        { millas: millasSumar },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -61,7 +61,6 @@ const clientesService = {
       console.error("Error al obtener los clientes con mas millas:", error)
       return []
     }
-
   },
 
   getClientesEmail: async (busqueda) => {

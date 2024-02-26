@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import reservaService from "../../services/reservaService"
 import pasajesService from "../../services/pasajesService"
+import clientesService from "../../services/clientesService"
 import { useNavigate } from "react-router-dom"
 
 const ReservaCompra = ({ vuelos }) => {
@@ -78,6 +79,21 @@ const ReservaCompra = ({ vuelos }) => {
         }
         return pasajesService.crearPasaje(pasaje)
       })
+      
+      for (const vuelo of vuelos) {
+        let millasASumar = vuelo.precio / 2
+         if (metodoPago === "MILLAS") {
+           millasASumar = -millasPorPasajero
+         }
+        try {
+          await clientesService.updateClienteMillas({
+            idcliente: vuelo.cliente.id,
+            millas: millasASumar,
+          })
+        } catch (error) {
+          console.error("Error al actualizar las millas del cliente:", error)
+        }
+      }
 
       await Promise.all(pasajesPromises)
 
