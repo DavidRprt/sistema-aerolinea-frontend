@@ -50,7 +50,6 @@ const getFlightDates = (vuelo, dateStr) => {
 
     // Si el vuelo sale en este día de la semana, lo añadimos al array
     if (vuelo[dayOfWeek]) {
-      // Usamos toISOString() y luego slice para obtener la fecha en formato YYYY-MM-DD
       daysOfMonth.push(date.toISOString().slice(0, 10))
     }
   }

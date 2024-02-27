@@ -35,7 +35,6 @@ const TripulantesDashboard = () => {
     return acc
   }, {})
 
-  // Renderizar componente
   return (
     <div className="container mx-auto p-4">
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
