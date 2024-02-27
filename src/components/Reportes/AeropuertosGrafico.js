@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react"
 import aeropuertoService from "../../services/aeropuertosService"
 import { ResponsiveBar } from "@nivo/bar"
-
+import { PDFDownloadLink } from "@react-pdf/renderer"
+import ReporteAeropuertosPDF from "./PDF"
 const AeropuertosGrafico = () => {
   const [datosAeropuertos, setDatosAeropuertos] = useState([])
+  console.log(datosAeropuertos)
 
   useEffect(() => {
     const fetchDatosAeropuertos = async () => {
@@ -47,12 +49,23 @@ const AeropuertosGrafico = () => {
     <div style={{ height: "500px" }}>
       <div className="flex justify-between items-center mb-4">
         <h2>Ciudades con Mayor Número de Rutas</h2>
-        <button
-          onClick={downloadCSV}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
-        >
-          Descargar CSV
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={downloadCSV}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
+          >
+            Descargar CSV
+          </button>
+          <PDFDownloadLink
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
+            document={<ReporteAeropuertosPDF datos={datosAeropuertos} />}
+            fileName="reporte_aeropuertos.pdf"
+          >
+            {({ blob, url, loading, error }) =>
+              loading ? "Cargando documento..." : "Descargar PDF"
+            }
+          </PDFDownloadLink>
+        </div>
       </div>
 
       <ResponsiveBar
