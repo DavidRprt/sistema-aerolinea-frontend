@@ -34,6 +34,23 @@ const crearPasaje = async (pasaje) => {
   }
 }
 
+const getTodosLosMenues = async () => {
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/menues`,
+      {
+        headers: {
+          Authorization: `Bearer ${getTokenFromCookie()}`,
+        },
+      }
+    )
+    return response.data
+  } catch (error) {
+    console.error("Error al obtener los menús:", error)
+    throw new Error("Error al obtener los menús")
+  }
+}
+
 const getFrecuenciaPorClase = async () => {
   try {
     const token = getTokenFromCookie()
@@ -49,5 +66,21 @@ const getFrecuenciaPorClase = async () => {
   }
 }
 
+const actualizarMenusDePasajes = async (cambios) => {
+  const token = getTokenFromCookie()
+  const response = await axios.patch(`${url}/menus`, cambios, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return response.data
+}
+
 // eslint-disable-next-line
-export default { getPasajesByAirport, crearPasaje, getFrecuenciaPorClase }
+export default {
+  getPasajesByAirport,
+  crearPasaje,
+  getFrecuenciaPorClase,
+  getTodosLosMenues,
+  actualizarMenusDePasajes,
+}

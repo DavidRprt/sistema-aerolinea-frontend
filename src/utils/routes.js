@@ -20,6 +20,8 @@ import SignUpForm from "../components//Login/SignUpForm"
 import TripulantesDashboard from "../components/Tripulantes/TripulantesDashboard"
 import TripulacionDashboard from "../components/Tripulacion/TripulacionDashboard"
 import TripulanteDetalles from "../components/Tripulantes/TripulanteDetalles"
+import ReservaForm from "../components/Reservas/ReservaForm"
+import ReservaDetalle from "../components/Reservas/ReservaDetalle"
 
 const RoutesConfig = () => {
   return (
@@ -43,6 +45,14 @@ const RoutesConfig = () => {
       <Route
         path="/resultados"
         element={<PrivateRoute component={FlightResultsDashboard} />}
+      />
+      <Route
+        path="/reserva"
+        element={<PrivateRoute component={ReservaForm} />}
+      />
+      <Route
+        path="/reserva/:id"
+        element={<PrivateRoute component={ReservaDetalle} />}
       />
       <Route path="/checkout" element={<PrivateRoute component={Checkout} />} />
       <Route

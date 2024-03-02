@@ -25,7 +25,24 @@ const crearReserva = async (reserva) => {
   }
 }
 
+const getReservaById = async (idreserva) => {
+  try {
+    const token = getTokenFromCookie()
+    const response = await axios.get(`${url}/${idreserva}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response.data
+  } catch (error) {
+    console.error("Error al obtener la reserva:", error)
+    throw error
+  }
+}
+
+
 // eslint-disable-next-line
 export default {
   crearReserva,
+  getReservaById
 }

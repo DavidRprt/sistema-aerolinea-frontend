@@ -10,6 +10,7 @@ import {
 import { CiAirportSign1 } from "react-icons/ci"
 import { BsFillAirplaneFill, BsFillAirplaneEnginesFill } from "react-icons/bs"
 import { useSelector } from "react-redux"
+import { TfiReceipt } from "react-icons/tfi"
 
 // MenuComponent: Clase base para elementos de menú
 class MenuComponent {
@@ -75,6 +76,11 @@ const Sidebar = () => {
       "Gestionar cliente",
       <AiOutlineUser className="text-xl" />,
       "/usuarios"
+    ),
+    new MenuItem(
+      "Gestionar reserva",
+      <TfiReceipt className="text-xl" />,
+      "/reserva"
     ),
   ]
 

@@ -61,7 +61,8 @@ const ReservaCompra = ({ vuelos }) => {
         fechaemision: fechaemision,
         preciototal: precioTotal,
       })
-      const idReserva = reservaResponse.id
+      
+      const idReserva = reservaResponse
 
       const vuelosConIdReserva = vuelos.map((vuelo) => ({
         ...vuelo,
@@ -98,7 +99,7 @@ const ReservaCompra = ({ vuelos }) => {
       await Promise.all(pasajesPromises)
 
       // Redirige al usuario a su página después de que la compra se realiza correctamente
-      navigate(`/usuarios/${vuelos[0].cliente.id}`)
+      navigate(`/reserva/${idReserva}`)
     } catch (error) {
       console.error("Error al confirmar la reserva:", error)
     }
