@@ -7,10 +7,31 @@ import { useNavigate } from "react-router-dom"
 const ReservaCompra = ({ vuelos }) => {
   const [metodoPago, setMetodoPago] = useState("") // Estado para almacenar el método de pago seleccionado
   const [precioTotal, setPrecioTotal] = useState(0) // Estado para almacenar el precio total de la reserva
+  const [cardNumber, setCardNumber] = useState("")
+  const [expDate, setExpDate] = useState("")
+  const [ccvNumber, setCcvNumber] = useState("")
+  const [cardName, setCardName] = useState("")
+  const isCardFormDisabled = metodoPago !== "credito"
   const [millas, setMillas] = useState(0)
   const navigate = useNavigate()
   const tasaConversion = 2
   const precioPorCliente = {}
+
+    const isCardFormValid = () => {
+      if (metodoPago === "credito") {
+        return (
+          cardNumber.length >= 19 && 
+          expDate.length === 5 &&
+          ccvNumber.length === 3 && 
+          cardName.length > 0 
+        )
+      }
+      return true 
+    }
+
+    // Determina si el botón debe estar deshabilitado
+    const isConfirmButtonDisabled =
+      metodoPago === "" || (metodoPago === "credito" && !isCardFormValid())
 
   vuelos.forEach((vuelo) => {
     if (precioPorCliente[vuelo.cliente.id]) {
@@ -61,7 +82,7 @@ const ReservaCompra = ({ vuelos }) => {
         fechaemision: fechaemision,
         preciototal: precioTotal,
       })
-      
+
       const idReserva = reservaResponse
 
       const vuelosConIdReserva = vuelos.map((vuelo) => ({
@@ -80,12 +101,12 @@ const ReservaCompra = ({ vuelos }) => {
         }
         return pasajesService.crearPasaje(pasaje)
       })
-      
+
       for (const vuelo of vuelos) {
         let millasASumar = vuelo.precio / 2
-         if (metodoPago === "MILLAS") {
-           millasASumar = -millasPorPasajero
-         }
+        if (metodoPago === "MILLAS") {
+          millasASumar = -millasPorPasajero
+        }
         try {
           await clientesService.updateClienteMillas({
             idcliente: vuelo.cliente.id,
@@ -107,6 +128,28 @@ const ReservaCompra = ({ vuelos }) => {
 
   const handlePaymentMethodChange = (event) => {
     setMetodoPago(event.target.value)
+  }
+
+  const handleCardNumberChange = (e) => {
+    const value = e.target.value
+      .replace(/\D/g, "")
+      .replace(/(.{4})/g, "$1 ")
+      .trim()
+    setCardNumber(value)
+  }
+  const handleExpDateChange = (e) => {
+    const value = e.target.value
+      .replace(/\D/g, "")
+      .replace(/(.{2})/, "$1/")
+      .substr(0, 5)
+    setExpDate(value)
+  }
+  const handleCcvNumberChange = (e) => {
+    const value = e.target.value.replace(/\D/g, "").substr(0, 3)
+    setCcvNumber(value)
+  }
+  const handleCardNameChange = (e) => {
+    setCardName(e.target.value)
   }
 
   return (
@@ -146,16 +189,6 @@ const ReservaCompra = ({ vuelos }) => {
             <input
               type="radio"
               className="form-radio"
-              value="paypal"
-              checked={metodoPago === "paypal"}
-              onChange={handlePaymentMethodChange}
-            />
-            <span className="text-gray-700">PayPal</span>
-          </label>
-          <label className="flex items-center space-x-3">
-            <input
-              type="radio"
-              className="form-radio"
               value="MILLAS"
               disabled={!todosTienenSuficientesMillas}
               checked={metodoPago === "MILLAS"}
@@ -172,10 +205,125 @@ const ReservaCompra = ({ vuelos }) => {
         </div>
       </div>
 
-      <div className="flex justify-end items-end w-full">
+      <main className="flex flex-col items-center justify-between p-6">
+        <form className="bg-white w-full max-w-3xl mx-auto px-4 py-8 shadow-md rounded-md flex flex-col lg:flex-row">
+          <div className="w-full lg:w-1/2 lg:pr-8 lg:border-r-2 lg:border-slate-300">
+            {/* Inputs for card details */}
+            <div className="mb-4">
+              <label className="text-neutral-800 font-bold text-sm mb-2 block">
+                Card number:
+              </label>
+              <input
+                type="text"
+                className="flex h-10 w-full rounded-md border-2 bg-background px-4 py-1.5 text-lg"
+                maxLength="19"
+                placeholder="XXXX XXXX XXXX XXXX"
+                value={cardNumber}
+                onChange={handleCardNumberChange}
+                disabled={isCardFormDisabled}
+              />
+            </div>
+            <div className="flex gap-x-2 mb-4">
+              <div className="block">
+                <label className="text-neutral-800 font-bold text-sm mb-2 block">
+                  Exp. date:
+                </label>
+                <input
+                  type="text"
+                  className="flex h-10 w-full rounded-md border-2 bg-background px-4 py-1.5 text-lg"
+                  maxLength="5"
+                  placeholder="MM/YY"
+                  value={expDate}
+                  onChange={handleExpDateChange}
+                  disabled={isCardFormDisabled}
+                />
+              </div>
+              <div className="block">
+                <label className="text-neutral-800 font-bold text-sm mb-2 block">
+                  CCV:
+                </label>
+                <input
+                  type="text"
+                  className="flex h-10 w-full rounded-md border-2 bg-background px-4 py-1.5 text-lg"
+                  maxLength="3"
+                  placeholder="123"
+                  value={ccvNumber}
+                  onChange={handleCcvNumberChange}
+                  disabled={isCardFormDisabled}
+                />
+              </div>
+            </div>
+            <div className="mb-4">
+              <label className="text-neutral-800 font-bold text-sm mb-2 block">
+                Card holder:
+              </label>
+              <input
+                type="text"
+                className="flex h-10 w-full rounded-md border-2 bg-background px-4 py-1.5 text-lg"
+                placeholder="John Doe"
+                value={cardName}
+                onChange={handleCardNameChange}
+                disabled={isCardFormDisabled}
+              />
+            </div>
+          </div>
+
+          <div className="p-6">
+            <div className="w-96 h-56  bg-red-100 rounded-xl text-white shadow-2xl transition-transform transform hover:scale-110">
+              <img
+                className="relative object-cover w-full h-full rounded-xl"
+                src="https://i.imgur.com/kGkSg1v.png"
+                alt="Background"
+              />
+              <div className="w-full px-8 absolute top-8">
+                <div className="flex justify-between">
+                  <div>
+                    <p className="font-light">Name</p>
+                    <p className="font-medium tracking-widest">{cardName}</p>
+                  </div>
+                  <img
+                    className="w-14 h-14"
+                    src="https://i.imgur.com/bbPHJVe.png"
+                    alt="Avatar"
+                  />
+                </div>
+                <div className="pt-1">
+                  <p className="font-light">Card Number</p>
+                  <p className="font-medium tracking-more-wider">
+                    {cardNumber}
+                  </p>
+                </div>
+                <div className="pt-6 pr-6">
+                  <div className="flex justify-between">
+                    <div>
+                      <p className="font-light text-xs">Expiry</p>
+                      <p className="font-medium tracking-wider text-sm">
+                        {expDate}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="font-light text-xs">CVV</p>
+                      <p className="font-bold tracking-more-wider text-sm">
+                        {ccvNumber}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </main>
+
+      <div className="flex justify-end items-end w-full p-5">
         <button
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          className={`font-bold py-2 px-4 rounded text-white ${
+            isConfirmButtonDisabled
+              ? "bg-green-300 cursor-not-allowed" // Estilo cuando está desactivado
+              : "bg-green-500 hover:bg-green-700" // Estilo normal
+          }`}
           onClick={handleConfirm}
+          disabled={isConfirmButtonDisabled}
         >
           Confirmar compra
         </button>
