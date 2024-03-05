@@ -33,13 +33,14 @@ const TripulanteTable = () => {
       field: "cargo",
       headerName: "Cargo",
       flex: 1,
-      valueGetter: (params) => params.row.cargo.nombre,
+      valueGetter: (params) => params.row.cargo?.nombre ?? "Sin Cargo",
     },
     {
       field: "tripulacion",
       headerName: "Nombre Tripulación",
       flex: 1,
-      valueGetter: (params) => params.row.tripulacion.nombre,
+      valueGetter: (params) =>
+        params.row.tripulacion?.nombre ?? "Sin Tripulación",
     },
     {
       field: "detalles",
