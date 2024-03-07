@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import MillasGrafico from "../Reportes/MillasGrafico"
 import ClasesGrafico from "../Reportes/ClasesGrafico"
 import AeropuertosGrafico from "../Reportes/AeropuertosGrafico"
+import LoginReporte from "../Reportes/LoginReporte"
 
 const HomeDashboard = () => {
   const [activeReport, setActiveReport] = useState("clases")
@@ -14,6 +15,8 @@ const HomeDashboard = () => {
         return <ClasesGrafico />
       case "aeropuertos":
         return <AeropuertosGrafico />
+      case "logInicio":
+        return <LoginReporte />
       default:
         return <div>Seleccione un reporte</div>
     }
@@ -28,8 +31,11 @@ const HomeDashboard = () => {
         <button onClick={() => setActiveReport("clases")} className="mr-4">
           Reporte de Clases
         </button>
-        <button onClick={() => setActiveReport("aeropuertos")}>
+        <button onClick={() => setActiveReport("aeropuertos")} className="mr-4">
           Reporte de Aeropuertos
+        </button>
+        <button onClick={() => setActiveReport("logInicio")} className="mr-4">
+          Reporte de Inicio de Sesión
         </button>
       </div>
       <div className="p-4">{renderReport()}</div>

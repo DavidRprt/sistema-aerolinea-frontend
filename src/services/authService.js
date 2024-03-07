@@ -14,6 +14,11 @@ const requestPasswordReset = async (email) => {
   return response.data
 }
 
+const getAllLogs = async () => {
+  const response = await axios.get(`${baseURL}/logs`)
+  return response.data
+}
+
 const getAllJobs = async () => {
   const response = await axios.get(`${baseURL}/jobs`)
   return response.data
@@ -42,4 +47,5 @@ export default {
   getAllEmployees,
   getAllJobs,
   updateEmployeeJob,
+  getAllLogs
 }
