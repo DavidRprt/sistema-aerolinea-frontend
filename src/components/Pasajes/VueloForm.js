@@ -1,12 +1,37 @@
 import React, { useState, useEffect } from "react"
 import FlightPrices from "./FlightPrices"
 import SelectDate from "./SelectDate"
+import tripulacionService from "../../services/tripulacionService"
+import rutasService from "../../services/rutasService"
 
 const VueloForm = ({ vuelo, fecha, setReserva }) => {
+  console.log(vuelo)
   const [selectedClass, setSelectedClass] = useState("")
   const [selectedDate, setSelectedDate] = useState("")
   const [selectedPrice, setSelectedPrice] = useState(0)
   const [isSelected, setIsSelected] = useState(false)
+  const [tripulaciones, setTripulaciones] = useState([])
+
+  const tripulacionSeleccionada = tripulaciones.find(
+    (tripulacion) => tripulacion.idtripulacion === vuelo.idtripulacion
+  )
+
+  // Preparar mensaje de tripulación
+  const nombreTripulacion = tripulacionSeleccionada
+    ? tripulacionSeleccionada.nombre
+    : "Sin tripulación"
+  useEffect(() => {
+    const fetchCargos = async () => {
+      try {
+        const data = await tripulacionService.getAllTripulaciones()
+        setTripulaciones(data)
+      } catch (error) {
+        console.error("Error al obtener los cargos:", error)
+      }
+    }
+
+    fetchCargos()
+  }, [])
 
   useEffect(() => {
     const vueloSeleccionado = {
@@ -15,50 +40,55 @@ const VueloForm = ({ vuelo, fecha, setReserva }) => {
       idclase: selectedClass,
       idreserva: null,
       fecha: selectedDate,
-      precio: selectedPrice
+      precio: selectedPrice,
     }
     if (isSelected) {
       setReserva(vueloSeleccionado)
     }
-  }, [selectedClass, selectedDate, vuelo, isSelected, setReserva, selectedPrice])
+  }, [
+    selectedClass,
+    selectedDate,
+    vuelo,
+    isSelected,
+    setReserva,
+    selectedPrice,
+  ])
 
+  const getFlightDates = (vuelo, dateStr) => {
+    const daysOfMonth = []
+    const daysOfWeek = [
+      "domingo",
+      "lunes",
+      "martes",
+      "miercoles",
+      "jueves",
+      "viernes",
+      "sabado",
+    ]
 
-const getFlightDates = (vuelo, dateStr) => {
-  const daysOfMonth = []
-  const daysOfWeek = [
-    "domingo",
-    "lunes",
-    "martes",
-    "miercoles",
-    "jueves",
-    "viernes",
-    "sabado",
-  ]
+    const year = parseInt(dateStr.slice(0, 4))
+    const month = parseInt(dateStr.slice(5, 7)) - 1 // Restamos 1 porque los meses son 0-based en JavaScript
 
-  const year = parseInt(dateStr.slice(0, 4))
-  const month = parseInt(dateStr.slice(5, 7)) - 1 // Restamos 1 porque los meses son 0-based en JavaScript
+    for (let day = 1; day <= 31; day++) {
+      const date = new Date(year, month, day)
 
-  for (let day = 1; day <= 31; day++) {
-    const date = new Date(year, month, day)
+      // Si ya pasamos al siguiente mes, rompemos el ciclo
+      if (date.getMonth() !== month) {
+        break
+      }
 
-    // Si ya pasamos al siguiente mes, rompemos el ciclo
-    if (date.getMonth() !== month) {
-      break
+      const dayOfWeek = daysOfWeek[date.getDay()]
+
+      // Si el vuelo sale en este día de la semana, lo añadimos al array
+      if (vuelo[dayOfWeek]) {
+        daysOfMonth.push(date.toISOString().slice(0, 10))
+      }
     }
 
-    const dayOfWeek = daysOfWeek[date.getDay()]
-
-    // Si el vuelo sale en este día de la semana, lo añadimos al array
-    if (vuelo[dayOfWeek]) {
-      daysOfMonth.push(date.toISOString().slice(0, 10))
-    }
+    return daysOfMonth
   }
 
-  return daysOfMonth
-}
-
   const flightDates = getFlightDates(vuelo, fecha)
-
 
   return (
     <div className="flex flex-col items-end p-6 bg-white rounded-lg shadow-lg m-2">
@@ -85,6 +115,9 @@ const getFlightDates = (vuelo, dateStr) => {
             </th>
             <th className="px-5 py-3 border-b-2 border-gray-200 text-gray-600">
               Precio
+            </th>
+            <th className="px-5 py-3 border-b-2 border-gray-200 text-gray-600">
+              Tripulación
             </th>
           </tr>
         </thead>
@@ -119,6 +152,9 @@ const getFlightDates = (vuelo, dateStr) => {
                 flightId={vuelo.idruta}
                 setSelectedPrice={setSelectedPrice}
               />
+            </td>
+            <td className="px-5 py-5 border-b border-gray-200 text-sm text-center">
+              {nombreTripulacion}
             </td>
           </tr>
         </tbody>

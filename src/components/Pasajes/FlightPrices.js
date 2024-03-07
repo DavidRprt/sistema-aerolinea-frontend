@@ -5,6 +5,7 @@ import {
   MdAirlineSeatFlat,
 } from "react-icons/md"
 
+
 const FlightPrices = ({
   precioBase,
   setSelectedClass,
@@ -19,11 +20,12 @@ const FlightPrices = ({
     return 0
   }
 
+
   const handleSelectionChange = (value) => {
     setSelectedClass(value)
     setSelectedPrice(calculatePrice(value))
   }
-
+ 
   return (
     <div className="flex-col gap-2 justify-start items-start">
       <div className="flex gap-2 justify-center items-center">
