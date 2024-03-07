@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react"
 import FlightPrices from "./FlightPrices"
 import SelectDate from "./SelectDate"
 import tripulacionService from "../../services/tripulacionService"
-import rutasService from "../../services/rutasService"
 
 const VueloForm = ({ vuelo, fecha, setReserva }) => {
   console.log(vuelo)
