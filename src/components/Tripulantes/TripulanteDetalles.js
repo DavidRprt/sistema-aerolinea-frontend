@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import tripulacionService from "../../services/tripulacionService"
+import { useSelector } from "react-redux"
 import {
   Box,
   TextField,
@@ -12,6 +13,7 @@ import {
 } from "@mui/material"
 
 const TripulanteDetalles = () => {
+  const user = useSelector((state) => state.user)
   const { idtripulante } = useParams()
   const [tripulaciones, setTripulaciones] = useState([])
   const [selectedTripulacion, setSelectedTripulacion] = useState({
@@ -57,6 +59,7 @@ const TripulanteDetalles = () => {
     fetchTripulante()
   }, [idtripulante])
 
+
   const handleTripulacionChange = (e) => {
     const tripulacionSeleccionada = tripulaciones.find(
       (t) => t.nombre === e.target.value
@@ -76,6 +79,7 @@ const TripulanteDetalles = () => {
       ...tripulante,
       idcargo: tripulante.idcargo,
       idtripulacion: selectedTripulacion.id,
+      idempleado:user.idempleado
     }
 
     delete tripulanteActualizado.cargo
