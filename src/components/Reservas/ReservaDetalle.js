@@ -8,6 +8,7 @@ import PasajePDF from "./PasajePDF"
 const ReservaDetalle = () => {
   const { id } = useParams()
   const [reserva, setReserva] = useState(null)
+  const [equipajes, setEquipajes] = useState([])
   const [error, setError] = useState("")
   const [reservaPasada, setReservaPasada] = useState(false)
   const [menues, setMenues] = useState([])
@@ -19,6 +20,8 @@ const ReservaDetalle = () => {
         // Solicitar detalles de la reserva y menús de manera concurrente
         const reservaPromise = reservaService.getReservaById(id)
         const menuesPromise = pasajesService.getTodosLosMenues()
+        const equipajesPromise = await pasajesService.getTodosLosEquipajes()
+        setEquipajes(equipajesPromise)
         const [reservaResult, menuesResult] = await Promise.all([
           reservaPromise,
           menuesPromise,
@@ -48,6 +51,12 @@ const ReservaDetalle = () => {
   }, [id])
 
   const hayCambiosPendientes = Object.keys(menuSeleccionados).length > 0
+
+  console.log(equipajes)
+
+  const contarEquipajes = (idpasaje) => {
+    return equipajes.filter((equipaje) => equipaje.idpasaje === idpasaje).length
+  }
 
   const hayCambiosParaGuardar = Object.entries(menuSeleccionados).some(
     ([idpasaje, id_menu]) =>
@@ -172,11 +181,9 @@ const ReservaDetalle = () => {
                 </PDFDownloadLink>
               </div>
             </div>
-
             <p className={`${esPasajePasado ? "text-red-700" : ""}`}>
               <strong>Clase:</strong> {pasaje.idclase}
             </p>
-
             <p className={`${esPasajePasado ? "text-red-700" : ""}`}>
               <strong>Fecha:</strong> {pasaje.fecha}
             </p>
@@ -194,6 +201,10 @@ const ReservaDetalle = () => {
             <p className={`${esPasajePasado ? "text-red-700" : ""}`}>
               <strong>Avión:</strong> {pasaje.rutum.avion.nombre}
             </p>
+            <p className={`${esPasajePasado ? "text-red-700" : ""}`}>
+              <strong>Maletas:</strong> {contarEquipajes(pasaje.idpasaje)}
+            </p>
+
             <p className={`${esPasajePasado ? "text-red-700" : ""}`}>
               <strong>Cliente:</strong> {pasaje.cliente.nombre}{" "}
               {pasaje.cliente.apellido}

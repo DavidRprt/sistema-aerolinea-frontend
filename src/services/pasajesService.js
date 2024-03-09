@@ -19,6 +19,24 @@ const getPasajesByAirport = async (idorigen, iddestino) => {
     throw new Error("Error al obtener los pasajes")
   }
 }
+
+const getTodosLosEquipajes = async () => {
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/equipajes`,
+      {
+        headers: {
+          Authorization: `Bearer ${getTokenFromCookie()}`,
+        },
+      }
+    )
+    return response.data
+  } catch (error) {
+    console.error("Error al obtener los equipajes:", error)
+    throw new Error("Error al obtener los equipajes")
+  }
+}
+
 const crearPasaje = async (pasaje) => {
   try {
     const token = getTokenFromCookie()
@@ -83,4 +101,5 @@ export default {
   getFrecuenciaPorClase,
   getTodosLosMenues,
   actualizarMenusDePasajes,
+  getTodosLosEquipajes
 }

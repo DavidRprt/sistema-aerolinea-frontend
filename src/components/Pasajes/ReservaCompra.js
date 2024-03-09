@@ -16,22 +16,23 @@ const ReservaCompra = ({ vuelos }) => {
   const navigate = useNavigate()
   const tasaConversion = 2
   const precioPorCliente = {}
+  const [equipajeExtra, setEquipajeExtra] = useState(0)
 
-    const isCardFormValid = () => {
-      if (metodoPago === "credito") {
-        return (
-          cardNumber.length >= 19 && 
-          expDate.length === 5 &&
-          ccvNumber.length === 3 && 
-          cardName.length > 0 
-        )
-      }
-      return true 
+  const isCardFormValid = () => {
+    if (metodoPago === "credito") {
+      return (
+        cardNumber.length >= 19 &&
+        expDate.length === 5 &&
+        ccvNumber.length === 3 &&
+        cardName.length > 0
+      )
     }
+    return true
+  }
 
-    // Determina si el botón debe estar deshabilitado
-    const isConfirmButtonDisabled =
-      metodoPago === "" || (metodoPago === "credito" && !isCardFormValid())
+  // Determina si el botón debe estar deshabilitado
+  const isConfirmButtonDisabled =
+    metodoPago === "" || (metodoPago === "credito" && !isCardFormValid())
 
   vuelos.forEach((vuelo) => {
     if (precioPorCliente[vuelo.cliente.id]) {
@@ -63,11 +64,11 @@ const ReservaCompra = ({ vuelos }) => {
   const precioPorPasajero = precioTotal / vuelos.length
   const millasPorPasajero = Math.round(precioPorPasajero * tasaConversion)
 
-  useEffect(() => {
-    const precio = vuelos.reduce((total, vuelo) => total + vuelo.precio, 0)
-    setPrecioTotal(precio)
-    setMillas(Math.round(precio * tasaConversion))
-  }, [vuelos])
+ useEffect(() => {
+   const precioBase = vuelos.reduce((total, vuelo) => total + vuelo.precio, 0)
+   const costoExtraPorEquipaje = 50 * equipajeExtra * vuelos.length
+   setPrecioTotal(precioBase + costoExtraPorEquipaje)
+ }, [vuelos, equipajeExtra])
 
   const handleConfirm = async () => {
     const fecha = new Date()
@@ -97,7 +98,8 @@ const ReservaCompra = ({ vuelos }) => {
           idclase: vuelo.idclase,
           idreserva: vuelo.idreserva,
           fecha: vuelo.fecha,
-          precio: vuelo.precio,
+          precio: vuelo.precio + 50 * equipajeExtra, 
+          equipajeExtra: equipajeExtra,
         }
         return pasajesService.crearPasaje(pasaje)
       })
@@ -159,7 +161,7 @@ const ReservaCompra = ({ vuelos }) => {
       </h2>
 
       <div className="flex flex-row justify-between w-full gap-3 p-3">
-        <div className="flex flex-col space-y-2 bg-white p-4 rounded-md shadow-sm w-full">
+        <div className="flex flex-col space-y-2 bg-white p-4 rounded-md shadow-sm w-full items-start">
           <p className="text-xl font-medium text-gray-600">
             Precio total: {precioTotal}$
           </p>
@@ -169,6 +171,27 @@ const ReservaCompra = ({ vuelos }) => {
           <p className="text-xl font-medium text-gray-600">
             Precio por tramo: {precioPorPasajero}$ ({millasPorPasajero} millas)
           </p>
+          <div className="flex items-center justify-center space-x-4 my-4">
+            <button
+              className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 disabled:bg-blue-300"
+              onClick={() => setEquipajeExtra(equipajeExtra - 1)}
+              disabled={equipajeExtra <= 0}
+            >
+              -
+            </button>
+
+            <div className="text-xl font-semibold">
+              {equipajeExtra} Equipaje(s)
+            </div>
+
+            <button
+              className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 disabled:bg-blue-300"
+              onClick={() => setEquipajeExtra(equipajeExtra + 1)}
+              disabled={equipajeExtra >= 2}
+            >
+              +
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-col space-y-2 bg-white p-4 rounded-md shadow-sm w-full">
