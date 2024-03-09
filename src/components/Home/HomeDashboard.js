@@ -3,6 +3,7 @@ import MillasGrafico from "../Reportes/MillasGrafico"
 import ClasesGrafico from "../Reportes/ClasesGrafico"
 import AeropuertosGrafico from "../Reportes/AeropuertosGrafico"
 import LoginReporte from "../Reportes/LoginReporte"
+import TripulantesReporte from "../Reportes/TripulantesReporte"
 
 const HomeDashboard = () => {
   const [activeReport, setActiveReport] = useState("clases")
@@ -17,6 +18,8 @@ const HomeDashboard = () => {
         return <AeropuertosGrafico />
       case "logInicio":
         return <LoginReporte />
+      case "tripulantes":
+        return <TripulantesReporte />
       default:
         return <div>Seleccione un reporte</div>
     }
@@ -36,6 +39,9 @@ const HomeDashboard = () => {
         </button>
         <button onClick={() => setActiveReport("logInicio")} className="mr-4">
           Reporte de Inicio de Sesión
+        </button>
+        <button onClick={() => setActiveReport("tripulantes")} className="mr-4">
+          Auditoria de Tripulantes
         </button>
       </div>
       <div className="p-4">{renderReport()}</div>

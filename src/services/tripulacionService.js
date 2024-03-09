@@ -40,6 +40,16 @@ const getAllTripulaciones = async () => {
   }
 }
 
+const getLogs = async () => {
+  try {
+    const response = await axios.get(`${baseURL}/tripulacionLogs`)
+    return response.data
+  } catch (error) {
+    console.error("Error al obtener todos los logs de tripulaciones:", error)
+    throw error
+  }
+}
+
 const addTripulante = async (tripulante) => {
   try {
     const token = getTokenFromCookie()
@@ -81,4 +91,5 @@ export default {
   getAllTripulaciones,
   addTripulante,
   updateTripulante,
+  getLogs,
 }
