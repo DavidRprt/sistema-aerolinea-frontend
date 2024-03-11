@@ -1,6 +1,7 @@
 import axios from "axios"
 
 const url = `${process.env.REACT_APP_API_URL}/reservas`
+const urlPago = `${process.env.REACT_APP_API_URL}/pagar`
 
 const getTokenFromCookie = () => {
   const tokenName = "token"
@@ -40,9 +41,32 @@ const getReservaById = async (idreserva) => {
   }
 }
 
+const procesarPago = async (id, precio) => {
+
+  try {
+    const token = getTokenFromCookie()
+    const datosPago = {
+      paymentMethodId: id,
+      precioTotal: precio,
+      currency: "usd", 
+    }
+
+    const response = await axios.post(urlPago, datosPago, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    return response.data
+  } catch (error) {
+    console.error("Error al procesar el pago:", error)
+    throw error
+  }
+}
 
 // eslint-disable-next-line
 export default {
   crearReserva,
-  getReservaById
+  getReservaById,
+  procesarPago,
 }

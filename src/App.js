@@ -13,6 +13,12 @@ import { cargarModelos } from "./reducers/modeloReducer"
 import { cargarRutas } from "./reducers/rutaReducer"
 import Cookies from "js-cookie"
 import { setUser } from "./reducers/userReducer"
+import { Elements } from "@stripe/react-stripe-js"
+import { loadStripe } from "@stripe/stripe-js"
+
+const stripePromise = loadStripe(
+  "pk_test_51OtERiCIkjrHMdYqtQUNIQb0PQbGR1uunHTn6JRLMwZmmzpn0tGTqqK74NfZDYxyy6ff0pvq2bkV5ykKNCIkp2TH00yKoK3Ky2"
+)
 
 function App() {
   const dispatch = useDispatch()
@@ -36,26 +42,28 @@ function App() {
     cargarDatos()
   }, [dispatch])
 
-   useEffect(() => {
-     // Leer la cookie que contiene la información del usuario
-     const userDataInCookie = Cookies.get("userInfo") 
+  useEffect(() => {
+    // Leer la cookie que contiene la información del usuario
+    const userDataInCookie = Cookies.get("userInfo")
 
-     if (userDataInCookie) {
-       const parsedData = JSON.parse(userDataInCookie)
-       dispatch(setUser(parsedData))
-     }
-   }, [dispatch])
+    if (userDataInCookie) {
+      const parsedData = JSON.parse(userDataInCookie)
+      dispatch(setUser(parsedData))
+    }
+  }, [dispatch])
 
   return (
     <div className="App">
       <Router>
-        <div className="flex bg-gray-200">
-          <Sidebar />
-          <div className="flex flex-col w-full">
-            <Navbar />
-            <RoutesConfig />
+        <Elements stripe={stripePromise}>
+          <div className="flex bg-gray-200">
+            <Sidebar />
+            <div className="flex flex-col w-full">
+              <Navbar />
+              <RoutesConfig />
+            </div>
           </div>
-        </div>
+        </Elements>
       </Router>
     </div>
   )

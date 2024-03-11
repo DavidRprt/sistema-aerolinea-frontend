@@ -22,6 +22,7 @@ import TripulacionDashboard from "../components/Tripulacion/TripulacionDashboard
 import TripulanteDetalles from "../components/Tripulantes/TripulanteDetalles"
 import ReservaForm from "../components/Reservas/ReservaForm"
 import ReservaDetalle from "../components/Reservas/ReservaDetalle"
+import PagoConTarjeta from "../components/Pasajes/PagoConTarjeta"
 
 const RoutesConfig = () => {
   return (
@@ -38,6 +39,10 @@ const RoutesConfig = () => {
         element={<PrivateRoute component={RutasDashboard} />}
       />
       <Route path="/admin" element={<PrivateRoute component={AdminPanel} />} />
+      <Route
+        path="/pago-con-tarjeta"
+        element={<PrivateRoute component={PagoConTarjeta} />}
+      />
       <Route
         path="/pasajes"
         element={<PrivateRoute component={PasajesDashboard} />}
